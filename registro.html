@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Registro - CEB Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bloom: { bg: '#e8e4d9', button: '#f6c358', buttonHover: '#e3b145', text: '#2d2d2d' }
+                    },
+                    fontFamily: { sport: ['Oswald', 'sans-serif'], sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='images/fondo.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="text-[#2d2d2d] flex items-center justify-center min-h-screen p-4 relative">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm z-0"></div>
+
+    <div class="w-full max-w-2xl bg-[#f4f1ea]/95 border border-bloom-text/10 rounded-2xl p-8 shadow-2xl relative z-10 my-6">
+        <div class="text-center mb-6">
+            <span class="font-sport font-bold text-sm text-bloom-buttonHover uppercase tracking-widest">CEB Portal</span>
+            <h1 class="font-sport text-4xl font-bold uppercase italic mt-1">Crear Cuenta</h1>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="mb-4 p-3 rounded text-xs font-bold uppercase tracking-wider bg-red-100 text-red-700 border border-red-200">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('registro') }}" method="POST" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Tipo de Documento -->
+                <div>
+                    <label class="block font-sport text-xs font-bold uppercase tracking-wider mb-1">Tipo de Documento</label>
+                    <select name="tipo_doc" required class="w-full px-4 py-2.5 bg-white border border-bloom-text/20 rounded-lg outline-none focus:border-bloom-text text-sm">
+                        <option value="CC">Cédula de Ciudadanía (CC)</option>
+                        <option value="TI">Tarjeta de Identidad (TI)</option>
+                        <option value="CE">Cédula de Extranjería (CE)</option>
+                        <option value="PP">Pasaporte (PP)</option>
+                        <option value="NIT">NIT</option>
+                    </select>
+                </div>
+
+                <!-- Número de Documento -->
+                <div>
+                    <label class="block font-sport text-xs font-bold uppercase tracking-wider mb-1">Número de Documento</label>
+                    <input type="text" name="numero_doc" required placeholder="123456789"
+                           class="w-full px-4 py-2.5 bg-white border border-bloom-text/20 rounded-lg outline-none focus:border-bloom-text text-sm">
+                </div>
+
+                <!-- Nombres -->
+                <div>
+                    <label class="block font-sport text-xs font-bold uppercase tracking-wider mb-1">Nombres</label>
+                    <input type="text" name="nombres" required placeholder="Juan Andrés"
+                           class="w-full px-4 py-2.5 bg-white border border-bloom-text/20 rounded-lg outline-none focus:border-bloom-text text-sm">
+                </div>
+
+                <!-- Apellidos -->
+                <div>
+                    <label class="block font-sport text-xs font-bold uppercase tracking-wider mb-1">Apellidos</label>
+                    <input type="text" name="apellidos" required placeholder="Pérez Gómez"
+                           class="w-full px-4 py-2.5 bg-white border border-bloom-text/20 rounded-lg outline-none focus:border-bloom-text text-sm">
+                </div>
+
+                <!-- Correo Electrónico -->
+                <div>
+                    <label class="block font-sport text-xs font-bold uppercase tracking-wider mb-1">Correo Electrónico</label>
+                    <input type="email" name="email" required placeholder="usuario@institucion.edu"
+                           class="w-full px-4 py-2.5 bg-white border border-bloom-text/20 rounded-lg outline-none focus:border-bloom-text text-sm">
+                </div>
+
+                <!-- Teléfono -->
+                <div>
+                    <label class="block font-sport text-xs font-bold uppercase tracking-wider mb-1">Teléfono</label>
+                    <input type="tel" name="telefono" placeholder="3001234567"
+                           class="w-full px-4 py-2.5 bg-white border border-bloom-text/20 rounded-lg outline-none focus:border-bloom-text text-sm">
+                </div>
+            </div>
+
+            <!-- Contraseña -->
+            <div>
+                <label class="block font-sport text-xs font-bold uppercase tracking-wider mb-1">Contraseña</label>
+                <input type="password" name="password" required placeholder="••••••••"
+                       class="w-full px-4 py-2.5 bg-white border border-bloom-text/20 rounded-lg outline-none focus:border-bloom-text text-sm">
+            </div>
+<!-- SECCIÓN DE SELECCIÓN DE ROL -->
+<div class="space-y-1">
+    <label class="block font-sport text-xs font-bold uppercase tracking-wider text-bloom-text/70">Rol en la Institución</label>
+    <select name="id_rol" required
+            class="w-full px-4 py-3 bg-white border border-bloom-text/20 focus:border-bloom-text outline-none transition-all text-bloom-text font-sport tracking-wider uppercase text-sm rounded-lg shadow-sm">
+        <option value="" disabled selected>SELECCIONA UN ROL</option>
+        <option value="3">Estudiante</option>
+        <option value="2">Profesor</option>
+        <option value="1">Administrador</option>
+    </select>
+</div>
+            <button type="submit" class="w-full py-3.5 mt-4 bg-bloom-button text-bloom-text font-sport font-bold italic uppercase tracking-wider text-sm rounded-lg hover:bg-bloom-buttonHover transition-colors shadow-lg">
+                Registrarse
+            </button>
+        </form>
+
+        <p class="text-center text-xs mt-6 text-bloom-text/70 font-medium">
+            ¿Ya tienes cuenta? 
+            <a href="{{ url_for('login') }}" class="font-bold text-bloom-buttonHover hover:underline uppercase">Inicia sesión</a>
+        </p>
+    </div>
+</body>
+</html>

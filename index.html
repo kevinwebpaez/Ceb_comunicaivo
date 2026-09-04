@@ -1,0 +1,704 @@
+!DOCTYPE html
+html lang=es
+head
+    meta charset=utf-8
+    meta name=viewport content=width=device-width, initial-scale=1.0
+    titleCEB Portal - Minimal Editorialtitle
+
+    link rel=stylesheet href=.CSSstyles.css
+    link rel=stylesheet href=.CSSfonts.css
+   
+    link href=httpsfonts.googleapis.comcss2family=Material+Symbols+Outlinedopsz,wght,FILL,GRAD@24,300,0,0 rel=stylesheet 
+
+    script src=httpscdn.tailwindcss.comscript
+    script
+        tailwind.config = {
+            theme {
+                extend {
+                    colors {
+                        bloom {
+                            bg '#e8e4d9',      
+                            button '#f6c358',  
+                            buttonHover '#e3b145',
+                            text '#2d2d2d',    
+                            light '#f4f1ea',    
+                        },
+                        periwinkle {
+                            500 '#5c6bc0',      
+                        }
+                    },
+                    fontFamily {
+                        sans ['Inter', 'sans-serif'],
+                        sport ['Oswald', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    script
+
+    script defer src=httpscdn.jsdelivr.netnpmalpinejs@3.x.xdistcdn.min.jsscript
+
+    style
+        [x-cloak] { display none !important; }
+       
+        -webkit-scrollbar { width 4px; height 4px; }
+        -webkit-scrollbar-track { background transparent; }
+        -webkit-scrollbar-thumb { background #d1cdc2; border-radius 4px; }
+        -webkit-scrollbar-thumbhover { background #b0aba0; }
+
+        body {
+            font-family 'Inter', sans-serif;
+            background-image url(.Imagesfondo.jpg);
+            background-size cover;
+            background-position center;
+            background-repeat no-repeat;
+            background-attachment fixed;
+            color #2d2d2d;
+        }
+    style
+head
+
+body class=antialiased min-h-screen flex flex-col relative transition-colors duration-300 x-data=cebPortalApp() class=darkMode  'bg-[#1a1a1a] text-[#f4f1ea]'  'bg-[#f4f1ea] text-[#2d2d2d]'
+
+    div x-show=page !== 'inicio'
+         x-transition.opacity.duration.1000ms
+         class=fixed inset-0 pointer-events-none z-0
+        div class=absolute inset-0 bg-[#e8e4d9] opacity-40 mix-blend-multiply class=darkMode  'bg-[#121212]'  'bg-[#e8e4d9]'div
+    div
+
+    header x-transition x-cloak
+            class=w-full absolute top-0 left-0 right-0 z-50 bg-transparent transition-all duration-300
+            class=page === 'inicio'  'text-white'  'text-bloom-text'
+        div class=max-w-7xl mx-auto px-6 lgpx-12
+            div class=flex justify-between items-center h-24
+               
+                div class=flex-shrink-0 cursor-pointer @click=navigate('inicio')
+                    span class=font-sans font-bold text-xl tracking-[0.2em] uppercaseCEB Portalspan
+                div
+               
+                nav class=hidden mdflex space-x-8 lgspace-x-12 items-center
+                    template x-for=navItem in ['inicio', 'anuncios', 'deportes', 'calendario']
+                        button @click=navigate(navItem)
+                                class=text-[15px] font-black italic tracking-widest uppercase transition-all duration-300 cursor-pointer hover-translate-y-0.5 relative group
+                                class=page === navItem  (page === 'inicio'  'text-white'  'text-bloom-text')  (page === 'inicio'  'text-white70 hovertext-white'  'text-gray-400 hovertext-bloom-text')
+                            span x-text=navItemspan
+                            span class=absolute -bottom-2 left-0 w-full h-[3px] transition-transform duration-300 origin-left
+                                  class=page === navItem  'bg-bloom-button scale-x-100'  'bg-bloom-button scale-x-0 group-hoverscale-x-100'span
+                        button
+                    template
+                nav
+
+                div class=hidden mdflex items-center gap-6
+                    button @click=navigate('perfil') class=text-[15px] font-medium transition-opacity hoveropacity-60 cursor-pointer
+                        Mi Perfil
+                    button
+                div
+
+                button class=mdhidden @click=mobileMenuOpen = !mobileMenuOpen
+                    span class=material-symbols-outlined text-3xlmenuspan
+                button
+            div
+        div
+    header
+
+    div x-show=mobileMenuOpen x-transition.opacity x-cloak class=fixed inset-0 bg-bloom-bg z-50 flex flex-col p-8 mdhidden text-bloom-text
+        div class=flex justify-end mb-12
+            button @click=mobileMenuOpen = falsespan class=material-symbols-outlined text-3xlclosespanbutton
+        div
+        nav class=flex flex-col space-y-6 text-2xl font-sans font-black italic uppercase tracking-widest
+            template x-for=navItem in ['inicio', 'anuncios', 'deportes', 'calendario', 'perfil']
+                button @click=navigate(navItem); mobileMenuOpen = false class=text-left transition-colors
+                        class=page === navItem  'text-bloom-buttonHover'  'text-bloom-text'
+                    span x-text=navItemspan
+                button
+            template
+        nav
+    div
+
+    main class=flex-1 w-full relative z-10 class=page === 'inicio'  ''  'max-w-7xl mx-auto px-6 lgpx-12 pt-36 pb-12'
+
+        !-- INICIO HERO --
+        div x-show=page === 'inicio' x-cloak x-transition.opacity.duration.500ms
+            div class=relative w-full h-screen min-h-[600px] flex items-center justify-center text-center bg-black40 backdrop-blur-[1px]
+                div class=relative z-10 p-6 flex flex-col items-center mt-12
+                    span class=font-sport text-3xl mdtext-5xl text-bloom-button tracking-widest uppercase italic mb-4
+                        Bienvenidos al
+                    span
+                    h1 class=font-sport text-6xl mdtext-8xl font-bold text-white tracking-wider uppercase italic leading-tight mb-10 drop-shadow-md
+                        Portal CEB
+                    h1
+                    button @click=navigate('anuncios') class=bg-bloom-button text-bloom-text px-10 py-4 font-sport font-bold italic uppercase tracking-widest hoverbg-bloom-buttonHover hoverscale-105 activescale-95 transition-all duration-300 shadow-lg cursor-pointer
+                        Explorar Anuncios
+                    button
+                div
+            div
+        div
+
+        !-- TABLERO DE ANUNCIOS --
+        div x-show=page === 'anuncios' x-cloak x-transition.opacity.duration.500ms class=space-y-10 max-w-5xl mx-auto
+            div class=text-center space-y-2
+                span class=font-sport text-lg font-bold tracking-widest text-bloom-buttonHover uppercase italicComunicadosspan
+                h1 class=font-sport text-4xl mdtext-5xl font-bold tracking-wide uppercase text-bloom-text italicTablero de Anunciosh1
+            div
+
+            div class=relative max-w-xl mx-auto
+                span class=material-symbols-outlined absolute left-0 top-12 -translate-y-12 text-bloom-text40 text-xl pl-4searchspan
+                input type=text x-model=searchQuery placeholder=BUSCAR COMUNICADOS...
+                       class=w-full pl-12 pr-4 py-3 bg-white border border-bloom-text20 focusborder-bloom-text outline-none transition-all text-bloom-text font-sport tracking-wider uppercase text-sm rounded-lg shadow-sm
+            div
+
+            div class=grid grid-cols-1 mdgrid-cols-2 gap-6
+                template x-for=item in filteredAnnouncements key=item.id
+                    div class=p-8 border border-bloom-text10 hoverborder-bloom-text hovershadow-lg duration-300 rounded-xl group flex flex-col h-full
+                         class=darkMode  'bg-[#242424] border-white10'  'bg-white'
+                        div class=flex justify-between items-center mb-4 pb-2 border-b border-bloom-text5
+                            span class=text-xs font-sport font-bold uppercase tracking-wider italic text-bloom-buttonHover
+                                  class=item.type === 'academico'  'text-periwinkle-500'  'text-bloom-buttonHover'
+                                  x-text=item.typespan
+                            span class=text-xs font-sans font-normal uppercase class=darkMode  'text-gray-400'  'text-bloom-text60' x-text=item.datespan
+                        div
+                        h3 class=font-sport text-xl mb-3 leading-snug font-bold uppercase italic class=darkMode  'text-white'  'text-bloom-text' x-text=item.titleh3
+                        p class=leading-relaxed font-normal text-sm flex-grow class=darkMode  'text-gray-300'  'text-bloom-text80' x-text=item.descp
+                    div
+                template
+               
+                div x-show=filteredAnnouncements.length === 0 class=col-span-1 mdcol-span-2 py-16 text-center border border-bloom-text10 rounded-xl shadow
+                     class=darkMode  'bg-[#242424] border-white10'  'bg-white'
+                    p class=font-sport text-2xl text-bloom-text30 italic uppercase mb-2Lo sentimosp
+                    p class=text-bloom-text50 font-light text-smNo se encontraron anuncios para span x-text=searchQueryspanp
+                div
+            div
+        div
+
+        !-- DEPORTES --
+        div x-show=page === 'deportes' x-cloak x-transition.opacity.duration.500ms class=space-y-10
+            div class=text-center space-y-2 max-w-2xl mx-auto
+                span class=font-sport text-lg font-bold tracking-widest text-bloom-buttonHover uppercase italicVida Sanaspan
+                h1 class=font-sport text-4xl mdtext-5xl font-bold tracking-wide uppercase italic class=darkMode  'text-white'  'text-bloom-text'Actividades Deportivash1
+                p class=font-normal pt-2 text-sm class=darkMode  'text-gray-300'  'text-bloom-text80'Inscripciones, horarios y ligas extracurriculares del CEB.p
+            div
+           
+            div class=grid grid-cols-1 mdgrid-cols-3 gap-8 items-start
+                template x-for=sport in sportsData key=sport.id
+                    div class=group relative border border-bloom-text10 overflow-hidden shadow rounded-xl hoverborder-bloom-text transition-all duration-300 flex flex-col
+                         class=darkMode  'bg-[#242424] border-white10'  'bg-white'
+                       
+                        div class=w-full h-32 relative flex items-center justify-center overflow-hidden bg-gradient-to-br
+                             class=sport.bgStyle
+                            div class=absolute inset-0 bg-black10 opacity-60 mix-blend-overlaydiv
+                           
+                            div class=absolute top-4 left-4 bg-bloom-button text-bloom-text w-10 h-10 rounded-full flex items-center justify-center shadow-md
+                                span class=material-symbols-outlined font-bold text-xl x-text=sport.iconspan
+                            div
+
+                            span class=absolute top-4 right-4 bg-black60 text-white font-sport text-[10px] px-2 py-1 uppercase tracking-wider italic rounded x-text=sport.schedulespan
+                        div
+
+                        div class=p-6 flex-1 flex flex-col justify-between
+                            div
+                                div class=flex justify-between items-center mb-3
+                                    h3 class=font-sport font-bold tracking-wide uppercase text-2xl italic class=darkMode  'text-white'  'text-bloom-text' x-text=sport.nameh3
+                                    span class=text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded
+                                          class=sport.slots  0  'bg-green-100 text-green-700'  'bg-red-100 text-red-700'
+                                          x-text=sport.slots  0  sport.slots + ' cupos'  'Lleno'span
+                                div
+                                p class=font-normal text-xs leading-relaxed mb-4 class=darkMode  'text-gray-300'  'text-bloom-text80' x-text=sport.descp
+                               
+                                div class=space-y-1 text-[11px] font-medium uppercase tracking-wider font-sport border-t pt-3
+                                     class=darkMode  'text-gray-400 border-white5'  'text-bloom-text60 border-bloom-text5'
+                                    divstrongEntrenadorstrong span class=darkMode  'text-white'  'text-bloom-text' x-text=sport.coachspandiv
+                                    divstrongLugarstrong span class=darkMode  'text-white'  'text-bloom-text' x-text=sport.locationspandiv
+                                div
+                            div
+
+                            div class=pt-6 space-y-2
+                                button @click=viewSportDetails(sport)
+                                        class=w-full py-2 border border-bloom-text20 font-sport text-xs font-bold uppercase tracking-widest rounded-lg flex items-center justify-center gap-2 transition-all hoverbg-bloom-button hovertext-bloom-text hoverborder-transparent cursor-pointer
+                                        class=darkMode  'border-white20 text-white'  'text-bloom-text bg-white'
+                                    span class=material-symbols-outlined text-smmenu_bookspan
+                                    spanVer Manual e Historiaspan
+                                button
+
+                                button @click=toggleEnrollment(sport)
+                                        disabled=sport.slots = 0 && !sport.enrolled
+                                        class=w-full py-2.5 font-sport font-bold italic uppercase tracking-wider text-xs rounded-lg transition-all duration-300 shadow cursor-pointer
+                                        class=sport.enrolled
+                                                 'bg-periwinkle-500 text-white hoverbg-periwinkle-600'
+                                                 (sport.slots  0  'bg-bloom-button hoverbg-bloom-buttonHover text-bloom-text'  'bg-gray-300 text-gray-500 cursor-not-allowed')
+                                    span x-text=sport.enrolled  'Inscrito ✓ (Cancelar)'  (sport.slots  0  'Inscribirme ahora'  'Sin Cupos Disponibles')span
+                                button
+                            div
+                        div
+
+                    div
+                template
+            div
+        div
+
+        !-- DETALLE DEPORTE --
+        div x-show=page === 'deporte-detalle' x-cloak x-transition.opacity.duration.500ms class=max-w-4xl mx-auto space-y-8
+            button @click=navigate('deportes') class=flex items-center gap-2 font-sport text-sm font-bold uppercase tracking-wider text-bloom-buttonHover hover-translate-x-1 transition-transform cursor-pointer
+                span class=material-symbols-outlinedarrow_backspan Volver a Deportes
+            button
+
+            template x-if=selectedSport
+                div class=border border-bloom-text10 rounded-2xl overflow-hidden shadow-xl class=darkMode  'bg-[#242424] border-white10'  'bg-white'
+                    div class=w-full h-40 relative flex items-end p-8 bg-gradient-to-br class=selectedSport.bgStyle
+                        div class=absolute inset-0 bg-black30div
+                        div class=relative z-10 flex items-center gap-4 text-white
+                            div class=bg-bloom-button text-bloom-text w-14 h-14 rounded-full flex items-center justify-center shadow-lg
+                                span class=material-symbols-outlined font-bold text-3xl x-text=selectedSport.iconspan
+                            div
+                            div
+                                h1 class=font-sport text-4xl mdtext-5xl font-bold uppercase italic tracking-wide x-text=selectedSport.nameh1
+                                p class=text-xs uppercase tracking-widest text-bloom-button x-text='Cátedra Técnica e Histórica • Directo desde ' + selectedSport.details.originp
+                            div
+                        div
+                    div
+
+                    div class=p-8 mdp-12 space-y-10
+                        div class=grid grid-cols-1 mdgrid-cols-2 gap-8
+                            div class=space-y-2
+                                h3 class=font-sport text-lg font-bold uppercase tracking-widest text-bloom-buttonHover flex items-center gap-2
+                                    span class=material-symbols-outlined text-xlinfospan ¿Qué es
+                                h3
+                                p class=text-sm font-normal leading-relaxed class=darkMode  'text-gray-300'  'text-bloom-text90' x-text=selectedSport.details.definitionp
+                            div
+                            div class=space-y-2
+                                h3 class=font-sport text-lg font-bold uppercase tracking-widest text-bloom-buttonHover flex items-center gap-2
+                                    span class=material-symbols-outlined text-xlsportsspan ¿Cómo se juega
+                                h3
+                                p class=text-sm font-normal leading-relaxed class=darkMode  'text-gray-300'  'text-bloom-text90' x-text=selectedSport.details.howToPlayp
+                            div
+                        div
+
+                        div class=p-6 bg-bloom-light40 border border-bloom-text5 rounded-xl space-y-3 class=darkMode  'bg-black20 border-white5'  ''
+                            h3 class=font-sport text-base font-bold uppercase tracking-widest text-bloom-buttonHover flex items-center gap-2
+                                span class=material-symbols-outlined text-xlgavelspan Reglamento Oficial  Reglas Clave
+                            h3
+                            ul class=list-none space-y-2 text-sm font-normal pl-1 class=darkMode  'text-gray-300'  'text-bloom-text90'
+                                template x-for=(rule, index) in selectedSport.details.rules
+                                    li class=flex items-start gap-2
+                                        span class=font-sport font-bold text-bloom-buttonHover mt-0.5 x-text=(index + 1) + '.'span
+                                        span x-text=rulespan
+                                    li
+                                template
+                            ul
+                        div
+
+                        div class=grid grid-cols-1 mdgrid-cols-3 gap-6 pt-4 border-t class=darkMode  'border-white5'  'border-bloom-text5'
+                            div class=space-y-1
+                                h4 class=font-sport text-xs font-bold uppercase tracking-wider text-bloom-buttonHover flex items-center gap-1
+                                    span class=material-symbols-outlined text-smlocation_onspan Cuna  Lugar de Origen
+                                h4
+                                p class=text-sm font-bold class=darkMode  'text-white'  'text-bloom-text' x-text=selectedSport.details.originp
+                            div
+                            div class=mdcol-span-2 space-y-1
+                                h4 class=font-sport text-xs font-bold uppercase tracking-wider text-bloom-buttonHover flex items-center gap-1
+                                    span class=material-symbols-outlined text-smhistory_eduspan Reseña Histórica
+                                h4
+                                p class=text-xs font-normal leading-relaxed class=darkMode  'text-gray-400'  'text-bloom-text70' x-text=selectedSport.details.historyp
+                            div
+                        div
+
+                    div
+                div
+            template
+        div
+
+        !-- CALENDARIO --
+        div x-show=page === 'calendario' x-cloak x-transition.opacity.duration.500ms class=max-w-5xl mx-auto
+            div class=text-center space-y-4 mb-10
+                h1 class=font-sport text-4xl mdtext-5xl font-bold tracking-wide uppercase italic class=darkMode  'text-white'  'text-bloom-text'Calendario Institucionalh1
+            div
+           
+            div class=grid grid-cols-1 lggrid-cols-3 gap-8
+                div class=lgcol-span-2 p-6 mdp-8 shadow border border-bloom-text10 rounded-xl transition-colors
+                     class=darkMode  'bg-[#242424] border-white10'  'bg-white'
+                   
+                    div class=flex justify-between items-center mb-8 pb-4 border-b border-bloom-text5 class=darkMode  'border-white10'  ''
+                        h2 class=font-sport text-2xl font-bold uppercase italic tracking-wider text-bloom-buttonHover
+                            x-text=monthNames[currentMonth] + ' ' + currentYearh2
+                        div class=flex gap-2
+                            button @click=prevMonth() class=w-9 h-9 flex items-center justify-center border border-bloom-text10 rounded-lg hoverbg-bloom-button hovertext-bloom-text transition-all cursor-pointer
+                                span class=material-symbols-outlined text-smwestspan
+                            button
+                            button @click=nextMonth() class=w-9 h-9 flex items-center justify-center border border-bloom-text10 rounded-lg hoverbg-bloom-button hovertext-bloom-text transition-all cursor-pointer
+                                span class=material-symbols-outlined text-smeastspan
+                            button
+                        div
+                    div
+
+                    div class=grid grid-cols-7 gap-2 mb-4 text-center text-xs font-sport font-bold tracking-wider text-bloom-text50 uppercase italic
+                        divLundivdivMardivdivMiedivdivJuedivdivViedivdivSabdivdivDomdiv
+                    div
+
+                    div class=grid grid-cols-7 gap-2
+                        template x-for=blank in blankDays
+                            div class=aspect-square border border-transparent opacity-0 pointer-events-nonediv
+                        template
+
+                        template x-for=day in daysInMonth
+                            div class=aspect-square flex flex-col items-center justify-between p-1.5 mdp-2 border rounded-lg transition-all duration-200 group relative cursor-pointer
+                                 class=[
+                                    darkMode  'border-white5 bg-[#2b2b2b] hoverborder-white20'  'border-bloom-text5 bg-bloom-light30 hoverborder-bloom-text20',
+                                    hasEvent(day)  (darkMode  'bg-bloom-button5 border-bloom-button30'  'bg-bloom-button10 border-bloom-button30')  '',
+                                    isToday(day)  'ring-2 ring-bloom-buttonHover shadow-md border-transparent'  ''
+                                 ]
+                               
+                                span class=font-sport text-base mdtext-lg tracking-wide self-start font-medium transition-colors
+                                      class=[
+                                        isToday(day)  'text-bloom-text font-black px-1 bg-bloom-button rounded'  (hasEvent(day)  'text-bloom-buttonHover font-bold'  (darkMode  'text-gray-300 group-hovertext-white'  'text-bloom-text70 group-hovertext-bloom-text'))
+                                      ]
+                                      x-text=dayspan
+                               
+                                div x-show=hasEvent(day) class=w-2 h-2 bg-bloom-buttonHover rounded-full self-end shadow-smdiv
+                            div
+                        template
+                    div
+
+                div
+
+                div class=space-y-6 p-6 border border-bloom-text10 rounded-xl shadow transition-colors
+                     class=darkMode  'bg-[#242424] border-white10'  'bg-white'
+                    h3 class=font-sport font-bold tracking-wider uppercase text-sm border-b pb-3 italic class=darkMode  'text-white border-white10'  'text-bloom-text border-bloom-text10'Agenda del Mesh3
+                   
+                    div class=space-y-4
+                        template x-for=evt in filteredEvents key=evt.id
+                            div class=flex gap-4 items-start p-3 bg-bloom-light50 border border-bloom-text5 rounded-lg hoverborder-bloom-text15 transition-all
+                                 class=darkMode  'bg-white5 border-white5'  ''
+                                div class=text-bloom-buttonHover font-sport font-bold text-2xl italic leading-none pt-0.5 x-text=evt.daydiv
+                                div
+                                    h4 class=font-sport font-bold text-sm uppercase tracking-wide class=darkMode  'text-white'  'text-bloom-text' x-text=evt.titleh4
+                                    p class=text-xs mt-0.5 font-normal class=darkMode  'text-gray-400'  'text-bloom-text70' x-text=evt.descp
+                                div
+                            div
+                        template
+
+                        div x-show=filteredEvents.length === 0 class=py-8 text-center opacity-40 font-sport uppercase text-sm tracking-widest italic
+                            No hay eventos este mes
+                        div
+
+                        button x-show=isAdminOrProf() class=w-full py-3 mt-4 bg-bloom-button hoverbg-bloom-buttonHover text-bloom-text font-sport font-bold italic uppercase tracking-wider text-xs rounded-lg transition-colors shadow cursor-pointer
+                            Programar Evento
+                        button
+                    div
+                div
+            div
+        div
+
+        !-- PERFIL --
+        div x-show=page === 'perfil' x-cloak x-transition.opacity.duration.500ms class=max-w-2xl mx-auto py-8
+            div class=p-8 mdp-10 shadow-lg border border-bloom-text10 rounded-xl transition-colors duration-300
+                 class=darkMode  'bg-[#242424] border-white10'  'bg-white'
+               
+                div class=text-center
+                    div class=w-24 h-24 mx-auto bg-bloom-bg text-bloom-text rounded-full flex items-center justify-center mb-4 border border-bloom-text10 shadow-inner
+                        span class=font-sport text-4xl font-bold uppercase italic x-text=user.name.charAt(0)span
+                    div
+                    h2 class=font-sport text-3xl font-bold uppercase italic mb-1 class=darkMode  'text-white'  'text-bloom-text' x-text=user.nameh2
+                    p class=text-sm font-normal mb-4 class=darkMode  'text-gray-400'  'text-bloom-text70' x-text=user.emailp
+                    template x-if=userRole
+                        div class=inline-block border border-bloom-buttonHover px-4 py-1.5 mb-8 rounded bg-bloom-button10
+                            p class=text-bloom-buttonHover font-sport font-bold uppercase tracking-wider text-xs x-text=userRolep
+                        div
+                    template
+                div
+
+                div class=border-t py-6 text-left space-y-4 class=darkMode  'border-white10'  'border-bloom-text10'
+                    h3 class=font-sport font-bold tracking-wider uppercase text-sm italic class=darkMode  'text-white'  'text-bloom-text'Datos Registradosh3
+                   
+                    div class=grid grid-cols-1 smgrid-cols-2 gap-4 text-xs
+                        div class=p-3.5 rounded-lg border class=darkMode  'bg-white5 border-white5'  'bg-bloom-light40 border-bloom-text5'
+                            span class=block font-sport font-bold uppercase tracking-wider text-[11px] mb-1 class=darkMode  'text-bloom-button'  'text-bloom-buttonHover'Tipo de Documentospan
+                            span class=font-medium text-sm class=darkMode  'text-white'  'text-bloom-text' x-text=user.tipoDocspan
+                        div
+
+                        div class=p-3.5 rounded-lg border class=darkMode  'bg-white5 border-white5'  'bg-bloom-light40 border-bloom-text5'
+                            span class=block font-sport font-bold uppercase tracking-wider text-[11px] mb-1 class=darkMode  'text-bloom-button'  'text-bloom-buttonHover'Número de Documentospan
+                            span class=font-medium text-sm class=darkMode  'text-white'  'text-bloom-text' x-text=user.numDocspan
+                        div
+
+                        div class=p-3.5 rounded-lg border class=darkMode  'bg-white5 border-white5'  'bg-bloom-light40 border-bloom-text5'
+                            span class=block font-sport font-bold uppercase tracking-wider text-[11px] mb-1 class=darkMode  'text-bloom-button'  'text-bloom-buttonHover'Teléfono  Celularspan
+                            span class=font-medium text-sm class=darkMode  'text-white'  'text-bloom-text' x-text=user.telefonospan
+                        div
+
+                        div class=p-3.5 rounded-lg border class=darkMode  'bg-white5 border-white5'  'bg-bloom-light40 border-bloom-text5'
+                            span class=block font-sport font-bold uppercase tracking-wider text-[11px] mb-1 class=darkMode  'text-bloom-button'  'text-bloom-buttonHover'Correo Electrónicospan
+                            span class=font-medium text-sm truncate block class=darkMode  'text-white'  'text-bloom-text' x-text=user.emailspan
+                        div
+                    div
+                div
+
+                div class=border-t border-b py-6 my-4 text-left space-y-5 class=darkMode  'border-white10'  'border-bloom-text10'
+                    h3 class=font-sport font-bold tracking-wider uppercase text-sm italic class=darkMode  'text-white'  'text-bloom-text'Ajustes de la Cuentah3
+                   
+                    div class=flex justify-between items-center
+                        div class=flex items-center gap-3
+                            span class=material-symbols-outlined text-xl class=darkMode  'text-bloom-button'  'text-bloom-text60'dark_modespan
+                            span class=text-sm font-mediumModo Oscurospan
+                        div
+                        button @click=darkMode = !darkMode class=w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 focusoutline-none cursor-pointer class=darkMode  'bg-bloom-button'  'bg-gray-300'
+                            div class=bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 class=darkMode  'translate-x-6'  'translate-x-0'div
+                        button
+                    div
+
+                    div class=flex justify-between items-center
+                        div class=flex items-center gap-3
+                            span class=material-symbols-outlined text-xl class=darkMode  'text-bloom-button'  'text-bloom-text60'
+                                span x-text=notifications  'notifications'  'notifications_off'span
+                            span
+                            span class=text-sm font-mediumNotificaciones del Portalspan
+                        div
+                        button @click=notifications = !notifications; if(!notifications) { showToast = true; setTimeout(() = showToast = false, 3000) } class=w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 focusoutline-none cursor-pointer class=notifications  'bg-periwinkle-500'  'bg-gray-300'
+                            div class=bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 class=notifications  'translate-x-6'  'translate-x-0'div
+                        button
+                    div
+                div
+
+                div class=pt-4
+                    button @click=navigate('inicio')
+                       class=w-full flex items-center justify-center gap-2 py-3.5 bg-red-600 hoverbg-red-700 text-white font-sport font-bold italic uppercase tracking-wider text-xs rounded-lg transition-all duration-300 shadow-md hovershadow-lg hoverscale-[1.01] activescale-[0.99] cursor-pointer
+                        span class=material-symbols-outlined text-baselogoutspan
+                        spanCerrar Sesiónspan
+                    button
+                div
+
+            div
+
+            div x-show=showToast x-transition x-cloak class=fixed bottom-5 right-5 bg-bloom-text text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 text-xs font-medium z-50
+                span class=material-symbols-outlined text-sm text-bloom-buttonnotifications_offspan
+                spanNotificaciones desactivadas en este dispositivo.span
+            div
+        div
+
+    main
+
+    footer x-cloak x-transition
+            class=w-full mt-auto border-t py-8 transition-colors duration-300
+            class=darkMode  'bg-[#1e1e1e] border-white10 text-gray-400'  'bg-white border-bloom-text10 text-bloom-text70'
+        div class=max-w-7xl mx-auto px-6 lgpx-12 flex flex-col mdflex-row justify-between items-center gap-4 text-xs
+           
+            div class=flex items-center gap-2 font-sans
+                span class=font-bold tracking-wider uppercase class=darkMode  'text-white'  'text-bloom-text'© 2026 CEB Portal.span
+                spanTodos los derechos reservados.span
+            div
+
+            div class=flex gap-6 font-sport tracking-widest uppercase italic font-bold
+                button @click=navigate('inicio') class=hovertext-bloom-buttonHover transition-colors cursor-pointerIniciobutton
+                button @click=navigate('anuncios') class=hovertext-bloom-buttonHover transition-colors cursor-pointerAnunciosbutton
+                button @click=navigate('deportes') class=hovertext-bloom-buttonHover transition-colors cursor-pointerDeportesbutton
+                button @click=navigate('calendario') class=hovertext-bloom-buttonHover transition-colors cursor-pointerCalendariobutton
+            div
+
+            template x-if=userRole
+                div class=font-sans text-[11px] uppercase tracking-widest bg-bloom-bg30 px-3 py-1 rounded border border-current opacity-60
+                    Sesión span class=font-bold x-text=userRolespan
+                div
+            template
+
+        div
+    footer
+
+    script
+        function cebPortalApp() {
+            const todayObj = new Date();
+
+            return {
+                page 'inicio',
+                userRole Estudiante,
+               
+                darkMode false,
+                notifications true,
+                showToast false,
+               
+                searchQuery '',
+                mobileMenuOpen false,
+                selectedSport null,
+
+                user {
+                    name Kevin Paez,
+                    email kevinwebpaez@gmail.com,
+                    tipoDoc Cédula de Ciudadanía,
+                    numDoc 1000000000,
+                    telefono +57 300 000 0000
+                },
+
+                currentMonth todayObj.getMonth(),
+                currentYear todayObj.getFullYear(),
+                realTodayDay todayObj.getDate(),
+                realTodayMonth todayObj.getMonth(),
+                realTodayYear todayObj.getFullYear(),
+
+                monthNames ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+
+                get daysInMonth() {
+                    const total = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
+                    let arr = [];
+                    for(let d = 1; d = total; d++) { arr.push(d); }
+                    return arr;
+                },
+
+                get blankDays() {
+                    let firstDayIndex = new Date(this.currentYear, this.currentMonth, 1).getDay();
+                    let offset = firstDayIndex === 0  6  firstDayIndex - 1;
+                    let blanks = [];
+                    for(let b = 0; b  offset; b++) { blanks.push(b); }
+                    return blanks;
+                },
+
+                eventsData [
+                    { id 1, year 2026, monthId 3, day 25, title 'SIRS Entrega Final', desc 'Documentación técnica y prototipo de software.' },
+                    { id 2, year 2026, monthId 3, day 28, title 'Prueba Trimestral', desc 'Evaluación presencial de bases de datos.' },
+                    { id 3, year 2026, monthId 4, day 15, title 'Día de la Ciencia', desc 'Muestra de proyectos tecnológicos y laboratorios.' },
+                    { id 4, year 2026, monthId 5, day 10, title 'Intercolegiados', desc 'Apertura del campeonato regional de fútbol.' }
+                ],
+
+                prevMonth() {
+                    if (this.currentMonth === 0) {
+                        this.currentMonth = 11;
+                        this.currentYear--;
+                    } else {
+                        this.currentMonth--;
+                    }
+                },
+
+                nextMonth() {
+                    if (this.currentMonth === 11) {
+                        this.currentMonth = 0;
+                        this.currentYear++;
+                    } else {
+                        this.currentMonth++;
+                    }
+                },
+
+                hasEvent(day) {
+                    return this.eventsData.some(e = e.year === this.currentYear && e.monthId === this.currentMonth && e.day === day);
+                },
+
+                isToday(day) {
+                    return this.realTodayDay === day && this.realTodayMonth === this.currentMonth && this.realTodayYear === this.currentYear;
+                },
+
+                get filteredEvents() {
+                    return this.eventsData.filter(e = e.year === this.currentYear && e.monthId === this.currentMonth);
+                },
+
+                announcements [
+                    { id 1, type 'academico', date 'HOY', title 'Actualización de Bitácoras', desc 'Recuerden subir sus bitácoras de seguimiento antes del próximo viernes. Es obligatorio para el cierre.' },
+                    { id 2, type 'institucional', date '12 ABR', title 'Reglamento Actualizado 2026', desc 'Ya disponible para descarga el nuevo manual de convivencia académica. Por favor leer secciones modificadas.' },
+                    { id 3, type 'academico', date '05 ABR', title 'Apertura de Biblioteca Virtual', desc 'Nuevos recursos bibliográficos han sido añadidos a la plataforma digital para todas las facultades.' }
+                ],
+
+                sportsData [
+                    {
+                        id 1,
+                        name 'Fútbol',
+                        icon 'sports_soccer',
+                        schedule 'Mar y Jue - 400 PM',
+                        bgStyle 'from-[#2a3c2a] to-[#436543]',
+                        desc 'Formación táctica, preparación física e inscripciones abiertas para el torneo intercolegial regional. ¡Arma tu plantilla!',
+                        coach 'Prof. Alejandro Silva',
+                        location 'Cancha Principal Sintética',
+                        slots 8,
+                        enrolled false,
+                        details {
+                            definition 'Deporte de equipo jugado entre dos conjuntos de 11 jugadores cuyo objetivo es introducir el balón en la portería contraria usando cualquier parte del cuerpo excepto manos y brazos.',
+                            howToPlay 'Se disputa en un terreno rectangular de césped mediante pases, carreras y estrategias colectivas para burlar la defensa contraria durante dos tiempos de 45 minutos.',
+                            rules [
+                                'No tocar el balón con las manos (excepto el portero en su área).',
+                                'El fuera de juego sanciona al atacante más adelantado que el último defensa.',
+                                'Las faltas graves se penalizan con tarjeta amarilla o roja (expulsión).'
+                            ],
+                            origin 'Inglaterra (Reino Unido)',
+                            history 'Aunque existían juegos similares ancestrales, las reglas modernas se unificaron en 1863 en Londres, fundando la Football Association (FA).'
+                        }
+                    },
+                    {
+                        id 2,
+                        name 'Voleibol',
+                        icon 'sports_volleyball',
+                        schedule 'Lun y Mie - 330 PM',
+                        bgStyle 'from-[#2e3a59] to-[#4a5d8c]',
+                        desc 'Técnicas de recepción, saque y juego en equipo. Categorías mixtas disponibles para todos los niveles de experiencia.',
+                        coach 'Lic. Milena Castro',
+                        location 'Coliseo Cubierto - Zona Sur',
+                        slots 15,
+                        enrolled false,
+                        details {
+                            definition 'Deporte de pista donde dos equipos de 6 integrantes se enfrentan sobre un terreno liso separados por una red central, intentando que el balón toque el suelo del campo oponente.',
+                            howToPlay 'El balón se impulsa mediante golpes limpios. Cada equipo dispone de un máximo de tres toques para devolver el balón hacia el campo contrario.',
+                            rules [
+                                'El balón debe ser golpeado, no sujetado ni retenido.',
+                                'Un mismo jugador no puede golpear el balón dos veces consecutivas.',
+                                'Los jugadores deben rotar sus posiciones en el sentido de las agujas del reloj al recuperar el saque.'
+                            ],
+                            origin 'Massachusetts, Estados Unidos',
+                            history 'Fue inventado en 1895 por William G. Morgan, un director de educación física de la YMCA, originalmente bajo el nombre de Mintonette como alternativa de menor impacto al básquet.'
+                        }
+                    },
+                    {
+                        id 3,
+                        name 'Básquet',
+                        icon 'sports_basketball',
+                        schedule 'Viernes - 200 PM',
+                        bgStyle 'from-[#50301a] to-[#804c29]',
+                        desc 'Fundamentos de dribbling, lanzamientos y sistemas de juego. Inscripciones activas para el torneo relámpago de fin de ciclo.',
+                        coach 'Prof. Carlos Mendoza',
+                        location 'Coliseo Cubierto - Cancha 1',
+                        slots 5,
+                        enrolled false,
+                        details {
+                            definition 'Deporte de ráfaga jugado por dos plantillas de 5 basquetbolistas activos en cancha, enfocado en anotar puntos introduciendo la pelota por un aro suspendido a 3.05 metros.',
+                            howToPlay 'Se avance botando (rebotando) de forma continua el balón contra el suelo o mediante pases a los compañeros. Las anotaciones valen 2 o 3 puntos según la distancia del tiro.',
+                            rules [
+                                'No se puede correr sosteniendo el balón en las manos sin dar botes (caminar).',
+                                'Una vez dejas de botar la pelota, solo puedes pivotar o lanzarpasar; no volver a botar (dobles).',
+                                'El contacto físico excesivo o ilegal se sanciona como falta personal.'
+                            ],
+                            origin 'Springfield, Massachusetts (EE. UU.)',
+                            history 'Creado en diciembre de 1891 por el clérigo e instructor canadiense James Naismith, quien buscaba una actividad bajo techo para mantener activos a sus alumnos durante el crudo invierno.'
+                        }
+                    }
+                ],
+
+                get filteredAnnouncements() {
+                    if (this.searchQuery === '') return this.announcements;
+                    return this.announcements.filter(a =
+                        a.title.toLowerCase().includes(this.searchQuery.toLowerCase()) 
+                        a.desc.toLowerCase().includes(this.searchQuery.toLowerCase())
+                    );
+                },
+
+                isAdminOrProf() {
+                    return this.userRole === 'Administrador'  this.userRole === 'Profesor';
+                },
+
+                navigate(targetPage) {
+                    this.page = targetPage;
+                    this.searchQuery = '';
+                    window.scrollTo({ top 0, behavior 'smooth' });
+                },
+
+                viewSportDetails(sport) {
+                    this.selectedSport = sport;
+                    this.navigate('deporte-detalle');
+                },
+
+                toggleEnrollment(sport) {
+                    if (sport.enrolled) {
+                        sport.enrolled = false;
+                        sport.slots++;
+                    } else {
+                        if (sport.slots  0) {
+                            sport.enrolled = true;
+                            sport.slots--;
+                        }
+                    }
+                }
+            }
+        }
+    script
+body
+html

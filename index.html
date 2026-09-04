@@ -48,7 +48,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-image: url("./static/Images/fondo.jpg");
+            background-image: url("./static/fondo.jpg");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -58,7 +58,7 @@
     </style>
 </head>
 
-<body class="antialiased min-h-screen flex flex-col relative transition-colors duration-300" x-data="cebPortalApp()" :class="darkMode ? 'bg-[#1a1a1a] text-[#f4f1ea]' : 'bg-[#f4f1ea] text-[#2d2d2d]'">
+<body class="antialiased min-h-screen flex flex-col relative transition-colors duration-300" x-data="cebPortalApp()" :class="darkMode ? 'text-[#f4f1ea]' : 'text-[#2d2d2d]'">
 
     <div x-show="page !== 'inicio'"
          x-transition.opacity.duration.1000ms
@@ -650,7 +650,7 @@
                         slots: 5,
                         enrolled: false,
                         details: {
-                            definition: 'Deporte de ráfaga jugado por two plantillas de 5 basquetbolistas activos en cancha, enfocado en anotar puntos introduciendo la pelota por un aro suspendido a 3.05 metros.',
+                            definition: 'Deporte de ráfaga jugado por dos plantillas de 5 basquetbolistas activos en cancha, enfocado en anotar puntos introduciendo la pelota por un aro suspendido a 3.05 metros.',
                             howToPlay: 'Se avanza botando (rebotando) de forma continua el balón contra el suelo o mediante pases a los compañeros. Las anotaciones valen 2 o 3 puntos según la distancia del tiro.',
                             rules: [
                                 'No se puede correr sosteniendo el balón en las manos sin dar botes (caminar).',

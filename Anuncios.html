@@ -1,0 +1,35 @@
+    <!-- TABLERO DE ANUNCIOS -->
+        <div x-show="page === 'anuncios'" x-cloak x-transition.opacity.duration.500ms class="space-y-10 max-w-5xl mx-auto">
+            <div class="text-center space-y-2">
+                <span class="font-sport text-lg font-bold tracking-widest text-bloom-buttonHover uppercase italic">Comunicados</span>
+                <h1 class="font-sport text-4xl md:text-5xl font-bold tracking-wide uppercase text-bloom-text italic">Tablero de Anuncios</h1>
+            </div>
+
+            <div class="relative max-w-xl mx-auto">
+                <span class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-bloom-text/40 text-xl pl-4">search</span>
+                <input type="text" x-model="searchQuery" placeholder="BUSCAR COMUNICADOS..."
+                       class="w-full pl-12 pr-4 py-3 bg-white border border-bloom-text/20 focus:border-bloom-text outline-none transition-all text-bloom-text font-sport tracking-wider uppercase text-sm rounded-lg shadow-sm">
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <template x-for="item in filteredAnnouncements" :key="item.id">
+                    <div class="p-8 border border-bloom-text/10 hover:border-bloom-text hover:shadow-lg duration-300 rounded-xl group flex flex-col h-full"
+                         :class="darkMode ? 'bg-[#242424] border-white/10' : 'bg-white'">
+                        <div class="flex justify-between items-center mb-4 pb-2 border-b border-bloom-text/5">
+                            <span class="text-xs font-sport font-bold uppercase tracking-wider italic text-bloom-buttonHover"
+                                  :class="item.type === 'academico' ? 'text-periwinkle-500' : 'text-bloom-buttonHover'"
+                                  x-text="item.type"></span>
+                            <span class="text-xs font-sans font-normal uppercase" :class="darkMode ? 'text-gray-400' : 'text-bloom-text/60'" x-text="item.date"></span>
+                        </div>
+                        <h3 class="font-sport text-xl mb-3 leading-snug font-bold uppercase italic" :class="darkMode ? 'text-white' : 'text-bloom-text'" x-text="item.title"></h3>
+                        <p class="leading-relaxed font-normal text-sm flex-grow" :class="darkMode ? 'text-gray-300' : 'text-bloom-text/80'" x-text="item.desc"></p>
+                    </div>
+                </template>
+               
+                <div x-show="filteredAnnouncements.length === 0" class="col-span-1 md:col-span-2 py-16 text-center border border-bloom-text/10 rounded-xl shadow"
+                     :class="darkMode ? 'bg-[#242424] border-white/10' : 'bg-white'">
+                    <p class="font-sport text-2xl text-bloom-text/30 italic uppercase mb-2">Lo sentimos</p>
+                    <p class="text-bloom-text/50 font-light text-sm">No se encontraron anuncios para "<span x-text="searchQuery"></span>"</p>
+                </div>
+            </div>
+        </div>

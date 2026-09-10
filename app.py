@@ -80,7 +80,7 @@ def registro():
                 # 2. Obtener el ID del usuario recién creado
                 id_nuevo_usuario = cursor.lastrowid
 
-                # 3. Insertar relación en 'usuario_rol' (asignado_por guarda el mismo ID del usuario)
+                # 3. Insertar relación en 'usuario_rol'
                 sql_rol = '''
                     INSERT INTO usuario_rol (id_usuario, id_rol, asignado_por)
                     VALUES (%s, %s, %s)
@@ -106,7 +106,6 @@ def index():
     try:
         conn = get_db_connection() 
         with conn.cursor() as cursor:
-            # Trae el código/nombre del rol desde la base de datos
             sql = """
                 SELECT u.*, COALESCE(r.codigo, r.nombre, 'SIN ROL') AS nombre_rol 
                 FROM usuarios u
@@ -125,6 +124,23 @@ def index():
         print(f"Error cargando inicio: {e}")
         flash("Hubo un problema al cargar tu perfil.", "error")
         return redirect(url_for('login'))
+
+@app.route('/anuncios')
+@login_required
+def anuncios():
+    return render_template('Anuncios.html')
+
+@app.route('/calendario')
+@login_required
+def calendario():
+    return render_template('calendario.html')
+
+@app.route('/perfil')
+@login_required
+def perfil():
+    id_usuario_logueado = session['user_id']
+    # Aquí puedes agregar la consulta de datos si deseas mostrarlos en perfil.html
+    return render_template('perfil.html')
 
 @app.route('/logout')
 def logout():

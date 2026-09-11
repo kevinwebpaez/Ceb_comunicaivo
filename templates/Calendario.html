@@ -1,1 +1,81 @@
 
+ <!-- CALENDARIO -->
+        <div x-show="page === 'calendario'" x-cloak x-transition.opacity.duration.500ms class="max-w-5xl mx-auto">
+            <div class="text-center space-y-4 mb-10">
+                <h1 class="font-sport text-4xl md:text-5xl font-bold tracking-wide uppercase italic" :class="darkMode ? 'text-white' : 'text-bloom-text'">Calendario Institucional</h1>
+            </div>
+           
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 p-6 md:p-8 shadow border border-bloom-text/10 rounded-xl transition-colors"
+                     :class="darkMode ? 'bg-[#242424] border-white/10' : 'bg-white'">
+                   
+                    <div class="flex justify-between items-center mb-8 pb-4 border-b border-bloom-text/5" :class="darkMode ? 'border-white/10' : ''">
+                        <h2 class="font-sport text-2xl font-bold uppercase italic tracking-wider text-bloom-buttonHover"
+                            x-text="monthNames[currentMonth] + ' ' + currentYear"></h2>
+                        <div class="flex gap-2">
+                            <button @click="prevMonth()" class="w-9 h-9 flex items-center justify-center border border-bloom-text/10 rounded-lg hover:bg-bloom-button hover:text-bloom-text transition-all cursor-pointer">
+                                <span class="material-symbols-outlined text-sm">west</span>
+                            </button>
+                            <button @click="nextMonth()" class="w-9 h-9 flex items-center justify-center border border-bloom-text/10 rounded-lg hover:bg-bloom-button hover:text-bloom-text transition-all cursor-pointer">
+                                <span class="material-symbols-outlined text-sm">east</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-7 gap-2 mb-4 text-center text-xs font-sport font-bold tracking-wider text-bloom-text/50 uppercase italic">
+                        <div>Lun</div><div>Mar</div><div>Mie</div><div>Jue</div><div>Vie</div><div>Sab</div><div>Dom</div>
+                    </div>
+
+                    <div class="grid grid-cols-7 gap-2">
+                        <template x-for="blank in blankDays">
+                            <div class="aspect-square border border-transparent opacity-0 pointer-events-none"></div>
+                        </template>
+
+                        <template x-for="day in daysInMonth">
+                            <div class="aspect-square flex flex-col items-center justify-between p-1.5 md:p-2 border rounded-lg transition-all duration-200 group relative cursor-pointer"
+                                 :class="[
+                                    darkMode ? 'border-white/5 bg-[#2b2b2b] hover:border-white/20' : 'border-bloom-text/5 bg-bloom-light/30 hover:border-bloom-text/20',
+                                    hasEvent(day) ? (darkMode ? 'bg-bloom-button/5 border-bloom-button/30' : 'bg-bloom-button/10 border-bloom-button/30') : '',
+                                    isToday(day) ? 'ring-2 ring-bloom-buttonHover shadow-md border-transparent' : ''
+                                 ]">
+                               
+                                <span class="font-sport text-base md:text-lg tracking-wide self-start font-medium transition-colors"
+                                      :class="[
+                                        isToday(day) ? 'text-bloom-text font-black px-1 bg-bloom-button rounded' : (hasEvent(day) ? 'text-bloom-buttonHover font-bold' : (darkMode ? 'text-gray-300 group-hover:text-white' : 'text-bloom-text/70 group-hover:text-bloom-text'))
+                                      ]"
+                                      x-text="day"></span>
+                               
+                                <div x-show="hasEvent(day)" class="w-2 h-2 bg-bloom-buttonHover rounded-full self-end shadow-sm"></div>
+                            </div>
+                        </template>
+                    </div>
+
+                </div>
+
+                <div class="space-y-6 p-6 border border-bloom-text/10 rounded-xl shadow transition-colors"
+                     :class="darkMode ? 'bg-[#242424] border-white/10' : 'bg-white'">
+                    <h3 class="font-sport font-bold tracking-wider uppercase text-sm border-b pb-3 italic" :class="darkMode ? 'text-white border-white/10' : 'text-bloom-text border-bloom-text/10'">Agenda del Mes</h3>
+                   
+                    <div class="space-y-4">
+                        <template x-for="evt in filteredEvents" :key="evt.id">
+                            <div class="flex gap-4 items-start p-3 bg-bloom-light/50 border border-bloom-text/5 rounded-lg hover:border-bloom-text/15 transition-all"
+                                 :class="darkMode ? 'bg-white/5 border-white/5' : ''">
+                                <div class="text-bloom-buttonHover font-sport font-bold text-2xl italic leading-none pt-0.5" x-text="evt.day"></div>
+                                <div>
+                                    <h4 class="font-sport font-bold text-sm uppercase tracking-wide" :class="darkMode ? 'text-white' : 'text-bloom-text'" x-text="evt.title"></h4>
+                                    <p class="text-xs mt-0.5 font-normal" :class="darkMode ? 'text-gray-400' : 'text-bloom-text/70'" x-text="evt.desc"></p>
+                                </div>
+                            </div>
+                        </template>
+
+                        <div x-show="filteredEvents.length === 0" class="py-8 text-center opacity-40 font-sport uppercase text-sm tracking-widest italic">
+                            No hay eventos este mes
+                        </div>
+
+                        <button x-show="isAdminOrProf()" class="w-full py-3 mt-4 bg-bloom-button hover:bg-bloom-buttonHover text-bloom-text font-sport font-bold italic uppercase tracking-wider text-xs rounded-lg transition-colors shadow cursor-pointer">
+                            Programar Evento
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>

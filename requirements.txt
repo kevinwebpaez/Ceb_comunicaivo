@@ -1,5 +1,4 @@
 Flask
-
 PyMySQL
-
 Werkzeug
+gunicorn

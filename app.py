@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import pymysql
 from functools import wraps
+# Importamos las herramientas de seguridad para las contraseñas
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = 'ceb_secret_key_2026'
 
-# Conexión a MySQL en phpMyAdmin
+# Conexión a MySQL
 def get_db_connection():
     return pymysql.connect(
         host='localhost',
@@ -38,12 +40,14 @@ def login():
         try:
             conn = get_db_connection()
             with conn.cursor() as cursor:
-                sql = 'SELECT * FROM usuarios WHERE email = %s AND hash_password = %s'
-                cursor.execute(sql, (email, password))
+                # Solo buscamos por email, la contraseña la verificamos después
+                sql = 'SELECT * FROM usuarios WHERE email = %s'
+                cursor.execute(sql, (email,))
                 user = cursor.fetchone()
             conn.close()
 
-            if user:
+            # Verificamos si el usuario existe Y si la contraseña coincide con el hash
+            if user and check_password_hash(user['hash_password'], password):
                 session['user_id'] = user['id_usuario']
                 session['user_name'] = user['nombres']
                 session['user_role'] = user.get('rol', 'Estudiante')
@@ -67,20 +71,23 @@ def registro():
         password = request.form['password']
         id_rol = request.form['id_rol']
 
+        # Encriptamos la contraseña antes de guardarla en la base de datos
+        hashed_password = generate_password_hash(password)
+
         try:
             conn = get_db_connection()
             with conn.cursor() as cursor:
-                # 1. Insertar en la tabla 'usuarios'
+                # 1. Insertar en la tabla 'usuarios' con la contraseña encriptada
                 sql_usuario = '''
                     INSERT INTO usuarios (tipo_doc, numero_doc, nombres, apellidos, email, telefono, hash_password, id_rol)
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                 '''
-                cursor.execute(sql_usuario, (tipo_doc, numero_doc, nombres, apellidos, email, telefono, password, id_rol))
+                cursor.execute(sql_usuario, (tipo_doc, numero_doc, nombres, apellidos, email, telefono, hashed_password, id_rol))
                 
                 # 2. Obtener el ID del usuario recién creado
                 id_nuevo_usuario = cursor.lastrowid
 
-                # 3. Insertar relación en 'usuario_rol' (asignado_por guarda el mismo ID del usuario)
+                # 3. Insertar relación en 'usuario_rol'
                 sql_rol = '''
                     INSERT INTO usuario_rol (id_usuario, id_rol, asignado_por)
                     VALUES (%s, %s, %s)

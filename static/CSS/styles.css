@@ -6,8 +6,11 @@
 ::-webkit-scrollbar-thumb:hover { background: #b0aba0; }
 
 body {
+    body {
     font-family: 'Inter', sans-serif;
     color: #2d2d2d;
+    min-height: 100vh;
+    margin: 0;
     background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;

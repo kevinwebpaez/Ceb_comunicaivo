@@ -9,7 +9,7 @@ body {
     font-family: 'Inter', sans-serif;
     color: #2d2d2d;
     /* Propiedades de fondo unificadas y limpias */
-    background-image: url('../img/fondo.jpg'); /* Ajusta la ruta si está en static/css/ o static/img/ */
+    background-image: url('../Images/fondo.jpg'); /* Ajusta la ruta si está en static/css/ o static/img/ */
     background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;

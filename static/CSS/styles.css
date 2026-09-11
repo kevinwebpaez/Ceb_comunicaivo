@@ -7,14 +7,15 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background-image: url('../Images/fondo.jpg') !important;
     background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
     background-attachment: fixed !important;
     color: #2d2d2d;
+    background-image: url('fondo.jpg'); /* O el nombre de tu archivo */
+    background-size: cover;
+    /* ... otras propiedades */
 }
-
 .page-root {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

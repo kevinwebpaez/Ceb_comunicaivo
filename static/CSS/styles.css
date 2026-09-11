@@ -7,15 +7,15 @@
 
 body {
     font-family: 'Inter', sans-serif;
+    color: #2d2d2d;
+    /* Propiedades de fondo unificadas y limpias */
+    background-image: url('../img/fondo.jpg'); /* Ajusta la ruta si está en static/css/ o static/img/ */
     background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
     background-attachment: fixed !important;
-    color: #2d2d2d;
-    background-image: url('fondo.jpg'); /* O el nombre de tu archivo */
-    background-size: cover;
-    /* ... otras propiedades */
 }
+
 .page-root {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -24,6 +24,7 @@ body {
     flex-direction: column;
     position: relative;
 }
+
 .container { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
 .top-nav { width: 100%; position: absolute; top: 0; left: 0; right: 0; z-index: 50; background: transparent; transition: all .3s; }
 .nav-row { display: flex; justify-content: space-between; align-items: center; height: 6rem; }
@@ -32,7 +33,6 @@ body {
 .mobile-toggle { display: none; background: none; border: none; }
 .mobile-menu { display: none; }
 .main-content { flex: 1 1 auto; width: 100%; position: relative; z-index: 10; }
-
 
 @media (max-width: 768px) {
     .nav-links, .nav-actions { display: none; }

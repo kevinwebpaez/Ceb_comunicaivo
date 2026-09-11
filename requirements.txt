@@ -1,0 +1,5 @@
+Flask
+
+PyMySQL
+
+Werkzeug

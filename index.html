@@ -145,150 +145,46 @@
             </div>
         </div>
 
-<!-- VISTA: SECCIÓN CALENDARIO CON CRUD COMPLETO -->
-        <div x-show="page === 'calendario'" x-cloak x-transition>
+<!-- Seccion de Eventos Institucionales -->
+<section class="py-8 bg-gray-900 text-white">
+    <div class="max-w-4xl mx-auto px-4">
+        <h2 class="text-2xl font-bold mb-6 text-center border-b border-gray-700 pb-2">
+            Próximos Eventos y Comunicados
+        </h2>
+
+        <!-- Contenedor de Eventos de Prueba -->
+        <div id="events-container" class="space-y-4">
             
-            <!-- Encabezado con Botón de Nuevo Evento -->
-            <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4 bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-neutral-100">
-                <div>
-                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-neutral-900">
-                        CALENDARIO Y EVENTOS
-                    </h1>
-                    <p class="text-xs text-neutral-500 mt-1">Gestiona, crea, edita y programa las actividades del portal.</p>
-                </div>
-                <button @click="openAddModal()" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-white px-5 py-2.5 font-bold text-xs uppercase tracking-wider rounded-xl transition cursor-pointer flex items-center justify-center gap-2 shadow-sm">
-                    <span class="material-symbols-outlined text-base">add_circle</span> Nuevo Evento
-                </button>
+            <!-- Evento de Prueba 1 -->
+            <div class="bg-gray-800 p-4 rounded-lg shadow-md border border-gray-700">
+                <span class="text-xs bg-blue-600 text-white px-2 py-1 rounded font-semibold">15 de Octubre, 2026</span>
+                <h3 class="text-lg font-bold mt-2">Feria de la Ciencia y Tecnología</h3>
+                <p class="text-sm text-gray-300 mt-1">
+                    Presentación de proyectos de programación y robótica por parte de los estudiantes de media fortalecida. ¡Los esperamos en el auditorio principal!
+                </p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                
-                <!-- Left Card: Componente del Calendario interactivo -->
-                <div class="lg:col-span-8 bg-white/90 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-sm border border-neutral-100">
-                    <div class="flex items-center justify-between mb-8">
-                        <h2 class="text-xl md:text-2xl font-bold tracking-tight text-neutral-900" x-text="monthNames[currentMonth] + ' ' + currentYear"></h2>
-                        <div class="flex items-center gap-2">
-                            <button @click="prevMonth()" class="p-2 rounded-lg hover:bg-neutral-100 text-neutral-600 transition cursor-pointer" aria-label="Mes anterior">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                            </button>
-                            <button @click="nextMonth()" class="p-2 rounded-lg hover:bg-neutral-100 text-neutral-600 transition cursor-pointer" aria-label="Mes siguiente">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-7 text-center text-xs font-semibold text-neutral-400 tracking-wider mb-4">
-                        <div>LUN</div><div>MAR</div><div>MIÉ</div><div>JUE</div><div>VIE</div><div>SÁB</div><div>DOM</div>
-                    </div>
-
-                    <div class="grid grid-cols-7 gap-y-3 text-center text-sm font-medium text-neutral-700">
-                        <template x-for="blank in blankDays">
-                            <div></div>
-                        </template>
-                        <template x-for="day in daysInMonth" :key="day">
-                            <div @click="selectDay(day)"
-                                 class="py-3 flex flex-col items-center justify-center relative cursor-pointer group transition rounded-xl border border-transparent"
-                                 :class="{
-                                     'bg-amber-500 text-white font-bold shadow-md': selectedDay === day,
-                                     'bg-amber-100/70 font-bold text-amber-800 border-amber-200': hasEvent(day) && selectedDay !== day,
-                                     'hover:bg-neutral-100': !hasEvent(day) && selectedDay !== day
-                                 }">
-                                <span x-text="day"></span>
-                                <span x-show="hasEvent(day) && selectedDay !== day" class="absolute bottom-1.5 w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
-                                <span x-show="selectedDay === day && hasEvent(day)" class="absolute bottom-1.5 w-1.5 h-1.5 bg-white rounded-full"></span>
-                            </div>
-                        </template>
-                    </div>
-                </div>
-
-                <!-- Right Card: Panel Dinámico con Opciones CRUD para Eventos -->
-                <div class="lg:col-span-4 bg-white/90 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-sm border border-neutral-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-xs font-bold tracking-widest uppercase text-neutral-400"
-                                x-text="selectedDay ? 'EVENTOS EL ' + selectedDay + ' DE ' + monthNames[currentMonth].toUpperCase() : 'PRÓXIMOS EVENTOS'">
-                            </h3>
-                            <template x-if="selectedDay !== null">
-                                <button @click="selectedDay = null" class="text-xs font-bold text-amber-600 hover:underline cursor-pointer">
-                                    Ver todo el mes
-                                </button>
-                            </template>
-                        </div>
-
-                        <div class="space-y-4 max-h-[380px] overflow-y-auto pr-1">
-                            <template x-for="event in filteredEvents" :key="event.id">
-                                <div class="bg-neutral-50/90 hover:bg-neutral-100/80 p-4 rounded-xl transition border border-neutral-100 flex flex-col gap-3 shadow-2xs">
-                                    <div class="flex gap-4 items-start">
-                                        <span class="text-xl font-extrabold text-amber-500 leading-none pt-0.5" x-text="event.day"></span>
-                                        <div>
-                                            <h4 class="text-xs font-bold text-neutral-900 uppercase" x-text="event.title"></h4>
-                                            <p class="text-xs text-neutral-500 mt-1 leading-relaxed" x-text="event.desc"></p>
-                                        </div>
-                                    </div>
-                                    <!-- Botones CRUD (Editar / Eliminar) -->
-                                    <div class="flex justify-end gap-2 pt-2 border-t border-neutral-200/60">
-                                        <button @click="openEditModal(event)" class="text-[11px] font-bold text-blue-600 hover:bg-blue-50 px-2 py-1 rounded transition flex items-center gap-1 cursor-pointer">
-                                            <span class="material-symbols-outlined text-sm">edit</span> Editar
-                                        </button>
-                                        <button @click="deleteEvent(event.id)" class="text-[11px] font-bold text-red-600 hover:bg-red-50 px-2 py-1 rounded transition flex items-center gap-1 cursor-pointer">
-                                            <span class="material-symbols-outlined text-sm">delete</span> Eliminar
-                                        </button>
-                                    </div>
-                                </div>
-                            </template>
-
-                            <template x-if="filteredEvents.length === 0">
-                                <div class="text-center py-12 text-neutral-400">
-                                    <span class="material-symbols-outlined text-4xl mb-2 opacity-40">event_busy</span>
-                                    <p class="text-xs font-medium">No hay eventos programados para esta fecha.</p>
-                                </div>
-                            </template>
-                        </div>
-                    </div>
-                </div>
+            <!-- Evento de Prueba 2 -->
+            <div class="bg-gray-800 p-4 rounded-lg shadow-md border border-gray-700">
+                <span class="text-xs bg-green-600 text-white px-2 py-1 rounded font-semibold">22 de Octubre, 2026</span>
+                <h3 class="text-lg font-bold mt-2">Jornada de Prevención contra la Desinformación</h3>
+                <p class="text-sm text-gray-300 mt-1">
+                    Charlas informativas y talleres prácticos sobre verificación de fuentes y uso seguro de portales institucionales escolares.
+                </p>
             </div>
 
-            <!-- MODAL PARA CREAR O EDITAR EVENTO (CRUD Modal) -->
-            <div x-show="modalOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
-                <div @click.away="modalOpen = false" class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-neutral-100">
-                    <h3 class="text-lg font-bold text-neutral-900 mb-4" x-text="isEditing ? 'Editar Evento' : 'Crear Nuevo Evento'"></h3>
-                    
-                    <form @submit.prevent="saveEvent()" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-neutral-500 mb-1">Título del Evento</label>
-                            <input type="text" x-model="eventForm.title" required class="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500">
-                        </div>
-                        <div class="grid grid-cols-3 gap-3">
-                            <div>
-                                <label class="block text-xs font-bold uppercase text-neutral-500 mb-1">Día</label>
-                                <input type="number" min="1" max="31" x-model.number="eventForm.day" required class="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold uppercase text-neutral-500 mb-1">Mes</label>
-                                <select x-model.number="eventForm.monthId" class="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500">
-                                    <template x-for="(mName, index) in monthNames">
-                                        <option :value="index" x-text="mName"></option>
-                                    </template>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold uppercase text-neutral-500 mb-1">Año</label>
-                                <input type="number" x-model.number="eventForm.year" required class="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-neutral-500 mb-1">Descripción</label>
-                            <textarea x-model="eventForm.desc" rows="3" class="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500"></textarea>
-                        </div>
-                        <div class="flex justify-end gap-3 pt-4 border-t border-neutral-100">
-                            <button type="button" @click="modalOpen = false" class="px-4 py-2 text-xs font-bold text-neutral-600 bg-neutral-100 rounded-lg hover:bg-neutral-200 cursor-pointer">Cancelar</button>
-                            <button type="submit" class="px-4 py-2 text-xs font-bold text-white bg-amber-500 hover:bg-amber-600 rounded-lg cursor-pointer" x-text="isEditing ? 'Guardar Cambios' : 'Crear Evento'"></button>
-                        </div>
-                    </form>
-                </div>
+            <!-- Evento de Prueba 3 -->
+            <div class="bg-gray-800 p-4 rounded-lg shadow-md border border-gray-700">
+                <span class="text-xs bg-purple-600 text-white px-2 py-1 rounded font-semibold">5 de Noviembre, 2026</span>
+                <h3 class="text-lg font-bold mt-2">Entrega de Informes Académicos Periodo IV</h3>
+                <p class="text-sm text-gray-300 mt-1">
+                    Citación para padres de familia y acudientes en las instalaciones de la institución en horario regular.
+                </p>
             </div>
+
         </div>
-
+    </div>
+</section>
         <!-- [SUGERENCIA]: AQUÍ PUEDES AGREGAR NUEVAS VISTAS PARA TUS SECCIONES NUEVAS -->
         <!-- Ejemplo: <div x-show="page === 'tu_nueva_seccion'" x-cloak x-transition> ... contenido ... </div> -->
 

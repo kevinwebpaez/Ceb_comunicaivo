@@ -145,11 +145,16 @@
             </div>
         </div>
 
-     <!-- VISTA: SECCIÓN CALENDARIO -->
+   <!-- VISTA: SECCIÓN CALENDARIO CON CRUD -->
         <div x-show="page === 'calendario'" x-cloak x-transition>
-            <h1 class="text-3xl md:text-4xl font-extrabold italic text-center tracking-wide mb-10">
-                CALENDARIO
-            </h1>
+            <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+                <h1 class="text-3xl md:text-4xl font-extrabold italic tracking-wide">
+                    CALENDARIO Y GESTIÓN DE EVENTOS
+                </h1>
+                <button @click="openAddModal()" class="bg-bloom-button text-bloom-text px-6 py-3 font-sport font-bold italic uppercase tracking-widest rounded-xl hover:bg-bloom-buttonHover transition cursor-pointer flex items-center gap-2 shadow-sm">
+                    <span class="material-symbols-outlined">add_circle</span> Nuevo Evento
+                </button>
+            </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 
@@ -191,7 +196,7 @@
                     </div>
                 </div>
 
-                <!-- Right Card: Panel Dinámico de Eventos por Fecha -->
+                <!-- Right Card: Panel Dinámico con Opciones CRUD para Eventos -->
                 <div class="lg:col-span-4 bg-white/90 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-sm border border-neutral-100 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-6">
@@ -207,11 +212,22 @@
 
                         <div class="space-y-4 max-h-[380px] overflow-y-auto pr-1">
                             <template x-for="event in filteredEvents" :key="event.id">
-                                <div class="bg-neutral-50/90 hover:bg-neutral-100/80 p-4 rounded-xl transition border border-neutral-100 flex gap-4 items-start shadow-2xs">
-                                    <span class="text-xl font-extrabold text-amber-500 leading-none pt-0.5" x-text="event.day"></span>
-                                    <div>
-                                        <h4 class="text-xs font-bold text-neutral-900 uppercase" x-text="event.title"></h4>
-                                        <p class="text-xs text-neutral-500 mt-1 leading-relaxed" x-text="event.desc"></p>
+                                <div class="bg-neutral-50/90 hover:bg-neutral-100/80 p-4 rounded-xl transition border border-neutral-100 flex flex-col gap-3 shadow-2xs">
+                                    <div class="flex gap-4 items-start">
+                                        <span class="text-xl font-extrabold text-amber-500 leading-none pt-0.5" x-text="event.day"></span>
+                                        <div>
+                                            <h4 class="text-xs font-bold text-neutral-900 uppercase" x-text="event.title"></h4>
+                                            <p class="text-xs text-neutral-500 mt-1 leading-relaxed" x-text="event.desc"></p>
+                                        </div>
+                                    </div>
+                                    <!-- Botones CRUD (Update / Delete) -->
+                                    <div class="flex justify-end gap-2 pt-2 border-t border-neutral-200/60">
+                                        <button @click="openEditModal(event)" class="text-[11px] font-bold text-blue-600 hover:bg-blue-50 px-2 py-1 rounded transition flex items-center gap-1 cursor-pointer">
+                                            <span class="material-symbols-outlined text-sm">edit</span> Editar
+                                        </button>
+                                        <button @click="deleteEvent(event.id)" class="text-[11px] font-bold text-red-600 hover:bg-red-50 px-2 py-1 rounded transition flex items-center gap-1 cursor-pointer">
+                                            <span class="material-symbols-outlined text-sm">delete</span> Eliminar
+                                        </button>
                                     </div>
                                 </div>
                             </template>
@@ -224,12 +240,47 @@
                             </template>
                         </div>
                     </div>
-
-                    <div class="mt-8 pt-4 border-t border-neutral-100 text-center">
-                        <span class="text-[11px] text-neutral-400 italic">Haz clic en cualquier fecha del calendario para filtrar.</span>
-                    </div>
                 </div>
+            </div>
 
+            <!-- MODAL PARA CREAR O EDITAR EVENTO (CRUD Modal) -->
+            <div x-show="modalOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+                <div @click.away="modalOpen = false" class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-neutral-100">
+                    <h3 class="text-lg font-bold text-neutral-900 mb-4" x-text="isEditing ? 'Editar Evento' : 'Crear Nuevo Evento'"></h3>
+                    
+                    <form @submit.prevent="saveEvent()" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-neutral-500 mb-1">Título del Evento</label>
+                            <input type="text" x-model="eventForm.title" required class="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500">
+                        </div>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-neutral-500 mb-1">Día</label>
+                                <input type="number" min="1" max="31" x-model.number="eventForm.day" required class="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-neutral-500 mb-1">Mes</label>
+                                <select x-model.number="eventForm.monthId" class="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500">
+                                    <template x-for="(mName, index) in monthNames">
+                                        <option :value="index" x-text="mName"></option>
+                                    </template>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-neutral-500 mb-1">Año</label>
+                                <input type="number" x-model.number="eventForm.year" required class="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-neutral-500 mb-1">Descripción</label>
+                            <textarea x-model="eventForm.desc" rows="3" class="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500"></textarea>
+                        </div>
+                        <div class="flex justify-end gap-3 pt-4 border-t border-neutral-100">
+                            <button type="button" @click="modalOpen = false" class="px-4 py-2 text-xs font-bold text-neutral-600 bg-neutral-100 rounded-lg hover:bg-neutral-200 cursor-pointer">Cancelar</button>
+                            <button type="submit" class="px-4 py-2 text-xs font-bold text-bloom-text bg-bloom-button rounded-lg hover:bg-bloom-buttonHover cursor-pointer" x-text="isEditing ? 'Guardar Cambios' : 'Crear Evento'"></button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
 

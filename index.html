@@ -1,568 +1,736 @@
 <!DOCTYPE html>
+
 <html lang="es">
+
 <head>
+
     <meta charset="utf-8"/>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
     <title>CEB Portal - Minimal Editorial</title>
 
+
+
     <link rel="stylesheet" href="./CSS/styles.css">
+
     <link rel="stylesheet" href="./CSS/fonts.css">
-    
+
+   
+
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" rel="stylesheet" />
 
+
+
     <script src="https://cdn.tailwindcss.com"></script>
+
     <script>
+
         tailwind.config = {
+
             theme: {
+
                 extend: {
+
                     colors: {
+
                         bloom: {
+
                             bg: '#e8e4d9',      
+
                             button: '#f6c358',  
+
                             buttonHover: '#e3b145',
+
                             text: '#2d2d2d',    
+
                             light: '#f4f1ea',    
+
                         },
+
                         periwinkle: {
-                            500: '#5c6bc0',     
+
+                            500: '#5c6bc0',      
+
                         }
+
                     },
+
                     fontFamily: {
+
                         sans: ['Inter', 'sans-serif'],
+
                         sport: ['Oswald', 'sans-serif'],
+
                     },
+
                 },
+
             },
+
         }
+
     </script>
+
+
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+
+
     <style>
+
         [x-cloak] { display: none !important; }
+
        
+
         ::-webkit-scrollbar { width: 4px; height: 4px; }
+
         ::-webkit-scrollbar-track { background: transparent; }
+
         ::-webkit-scrollbar-thumb { background: #d1cdc2; border-radius: 4px; }
+
         ::-webkit-scrollbar-thumb:hover { background: #b0aba0; }
 
+
+
         body {
+
             font-family: 'Inter', sans-serif;
+
             background-image: url("./static/Images/fondo.jpg");
+
             background-size: cover;
+
             background-position: center;
+
             background-repeat: no-repeat;
+
             background-attachment: fixed;
+
             color: #2d2d2d;
+
         }
+
     </style>
+
 </head>
+
+
 
 <body class="antialiased min-h-screen flex flex-col relative transition-colors duration-300" x-data="cebPortalApp()" :class="darkMode ? 'text-[#f4f1ea]' : 'text-[#2d2d2d]'">
 
-    <!-- Overlay de fondo -->
+
+
     <div x-show="page !== 'inicio'"
+
          x-transition.opacity.duration.1000ms
+
          class="fixed inset-0 pointer-events-none z-0">
+
         <div class="absolute inset-0 bg-[#e8e4d9] opacity-40 mix-blend-multiply" :class="darkMode ? 'bg-[#121212]' : 'bg-[#e8e4d9]'"></div>
+
     </div>
 
-    <!-- Header Principal -->
+
+
     <header x-transition x-cloak
+
             class="w-full absolute top-0 left-0 right-0 z-50 bg-transparent transition-all duration-300"
+
             :class="page === 'inicio' ? 'text-white' : 'text-bloom-text'">
+
         <div class="max-w-7xl mx-auto px-6 lg:px-12">
+
             <div class="flex justify-between items-center h-24">
+
                
+
                 <div class="flex-shrink-0 cursor-pointer" @click="navigate('inicio')">
+
                     <span class="font-sans font-bold text-xl tracking-[0.2em] uppercase">CEB Portal</span>
+
                 </div>
+
                
+
                 <nav class="hidden md:flex space-x-8 lg:space-x-12 items-center">
+
                     <template x-for="navItem in ['inicio', 'anuncios', 'deportes', 'calendario']">
+
                         <button @click="navigate(navItem)"
+
                                 class="text-[15px] font-black italic tracking-widest uppercase transition-all duration-300 cursor-pointer hover:-translate-y-0.5 relative group"
+
                                 :class="page === navItem ? (page === 'inicio' ? 'text-white' : 'text-bloom-text') : (page === 'inicio' ? 'text-white/70 hover:text-white' : 'text-gray-400 hover:text-bloom-text')">
+
                             <span x-text="navItem"></span>
+
                             <span class="absolute -bottom-2 left-0 w-full h-[3px] transition-transform duration-300 origin-left"
+
                                   :class="page === navItem ? 'bg-bloom-button scale-x-100' : 'bg-bloom-button scale-x-0 group-hover:scale-x-100'"></span>
+
                         </button>
+
                     </template>
+
                 </nav>
 
+
+
                 <div class="hidden md:flex items-center gap-6">
+
                     <button @click="navigate('perfil')" class="text-[15px] font-medium transition-opacity hover:opacity-60 cursor-pointer">
+
                         Mi Perfil
+
                     </button>
+
                 </div>
+
+
 
                 <button class="md:hidden" @click="mobileMenuOpen = !mobileMenuOpen">
+
                     <span class="material-symbols-outlined text-3xl">menu</span>
+
                 </button>
+
             </div>
+
         </div>
+
     </header>
 
-    <!-- Menú Móvil -->
+
+
     <div x-show="mobileMenuOpen" x-transition.opacity x-cloak class="fixed inset-0 bg-bloom-bg z-50 flex flex-col p-8 md:hidden text-bloom-text">
+
         <div class="flex justify-end mb-12">
+
             <button @click="mobileMenuOpen = false"><span class="material-symbols-outlined text-3xl">close</span></button>
+
         </div>
+
         <nav class="flex flex-col space-y-6 text-2xl font-sans font-black italic uppercase tracking-widest">
+
             <template x-for="navItem in ['inicio', 'anuncios', 'deportes', 'calendario', 'perfil']">
+
                 <button @click="navigate(navItem); mobileMenuOpen = false" class="text-left transition-colors"
+
                         :class="page === navItem ? 'text-bloom-buttonHover' : 'text-bloom-text'">
+
                     <span x-text="navItem"></span>
+
                 </button>
+
             </template>
+
         </nav>
+
     </div>
 
-    <!-- Contenido Dinámico -->
+
+
     <main class="flex-1 w-full relative z-10" :class="page === 'inicio' ? '' : 'max-w-7xl mx-auto px-6 lg:px-12 pt-36 pb-12'">
 
-        <!-- VISTA: INICIO HERO -->
+
+
+        <!-- INICIO HERO -->
+
         <div x-show="page === 'inicio'" x-cloak x-transition.opacity.duration.500ms>
+
             <div class="relative w-full h-screen min-h-[600px] flex items-center justify-center text-center bg-black/40 backdrop-blur-[1px]">
+
                 <div class="relative z-10 p-6 flex flex-col items-center mt-12">
+
                     <span class="font-sport text-3xl md:text-5xl text-bloom-button tracking-widest uppercase italic mb-4">
+
                         Bienvenidos al
+
                     </span>
+
                     <h1 class="font-sport text-6xl md:text-8xl font-bold text-white tracking-wider uppercase italic leading-tight mb-10 drop-shadow-md">
+
                         Portal CEB
+
                     </h1>
+
                     <button @click="navigate('anuncios')" class="bg-bloom-button text-bloom-text px-10 py-4 font-sport font-bold italic uppercase tracking-widest hover:bg-bloom-buttonHover hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg cursor-pointer">
+
                         Explorar Anuncios
+
                     </button>
+
                 </div>
+
             </div>
+
         </div>
 
-        <!-- VISTA: ANUNCIOS -->
-        <div x-show="page === 'anuncios'" x-cloak x-transition.opacity.duration.500ms>
-            <div class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h2 class="font-sport text-4xl font-bold uppercase italic tracking-wider">Tablón de Anuncios</h2>
-                    <p class="text-sm opacity-70 mt-1">Avisos institucionales y académicos recientes.</p>
-                </div>
-                <div class="w-full md:w-72">
-                    <input type="text" x-model="searchQuery" placeholder="Buscar anuncios..." class="w-full px-4 py-2.5 rounded-lg border border-bloom-text/20 bg-white/60 backdrop-blur focus:outline-none focus:ring-2 focus:ring-bloom-button text-sm">
-                </div>
-            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <template x-for="item in filteredAnnouncements" :key="item.id">
-                    <div class="bg-white/80 backdrop-blur-md p-6 rounded-xl border border-bloom-text/10 shadow-sm flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded bg-bloom-button/30 text-bloom-text" x-text="item.type"></span>
-                                <span class="text-xs font-semibold opacity-60" x-text="item.date"></span>
-                            </div>
-                            <h3 class="font-bold text-lg mb-2" x-text="item.title"></h3>
-                            <p class="text-sm opacity-80 leading-relaxed" x-text="item.desc"></p>
-                        </div>
-                    </div>
-                </template>
-            </div>
-        </div>
 
-        <!-- VISTA: DEPORTES -->
-        <div x-show="page === 'deportes'" x-cloak x-transition.opacity.duration.500ms>
-            <div class="mb-10">
-                <h2 class="font-sport text-4xl font-bold uppercase italic tracking-wider">Sección Deportiva</h2>
-                <p class="text-sm opacity-70 mt-1">Inscríbete y consulta los horarios de entrenamiento.</p>
-            </div>
+    
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <template x-for="sport in sportsData" :key="sport.id">
-                    <div class="bg-white/80 backdrop-blur-md rounded-xl border border-bloom-text/10 overflow-hidden shadow-sm flex flex-col justify-between">
-                        <div :class="'p-6 bg-gradient-to-br ' + sport.bgStyle + ' text-white'">
-                            <span class="material-symbols-outlined text-4xl mb-2" x-text="sport.icon"></span>
-                            <h3 class="font-sport text-2xl font-bold uppercase italic tracking-wide" x-text="sport.name"></h3>
-                            <p class="text-xs opacity-90 mt-1" x-text="sport.schedule"></p>
-                        </div>
-                        <div class="p-6 flex flex-col justify-between flex-1">
-                            <p class="text-sm opacity-80 mb-6" x-text="sport.desc"></p>
-                            <div class="flex items-center justify-between gap-3">
-                                <button @click="viewSportDetails(sport)" class="flex-1 px-4 py-2 text-xs font-bold uppercase tracking-wider border border-bloom-text/30 rounded hover:bg-bloom-text hover:text-white transition-colors cursor-pointer">
-                                    Ver Más
-                                </button>
-                                <button @click="toggleEnrollment(sport)" :class="sport.enrolled ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-bloom-button hover:bg-bloom-buttonHover text-bloom-text'" class="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition-colors cursor-pointer" x-text="sport.enrolled ? 'Cancelar' : 'Inscribirse'"></button>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-            </div>
-        </div>
+     
 
-        <!-- VISTA: DETALLE DE DEPORTE -->
-        <div x-show="page === 'deporte-detalle' && selectedSport" x-cloak x-transition.opacity.duration.500ms>
-            <button @click="navigate('deportes')" class="mb-6 flex items-center gap-2 text-xs font-bold uppercase tracking-widest opacity-70 hover:opacity-100 cursor-pointer">
-                <span class="material-symbols-outlined text-sm">arrow_back</span> Volver a deportes
-            </button>
-            <div class="bg-white/90 backdrop-blur-md p-8 rounded-2xl border border-bloom-text/10 shadow-sm" x-data="{ tab: 'info' }">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 pb-6 border-b border-bloom-text/10">
-                    <div>
-                        <h2 class="font-sport text-4xl font-bold uppercase italic tracking-wider" x-text="selectedSport?.name"></h2>
-                        <p class="text-xs font-bold tracking-widest uppercase opacity-60 mt-1" x-text="selectedSport?.coach + ' • ' + selectedSport?.location"></p>
-                    </div>
-                    <div class="flex gap-2">
-                        <button @click="tab = 'info'" :class="tab === 'info' ? 'bg-bloom-text text-white' : 'bg-bloom-bg text-bloom-text'" class="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition-colors cursor-pointer">Información</button>
-                        <button @click="tab = 'history'" :class="tab === 'history' ? 'bg-bloom-text text-white' : 'bg-bloom-bg text-bloom-text'" class="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition-colors cursor-pointer">Historia y Origen</button>
-                    </div>
-                </div>
 
-                <div x-show="tab === 'info'">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
-                        <div>
-                            <h4 class="font-bold text-sm uppercase tracking-wider mb-2 text-bloom-buttonHover">Definición</h4>
-                            <p class="text-sm opacity-80 leading-relaxed" x-text="selectedSport?.details?.definition"></p>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-sm uppercase tracking-wider mb-2 text-bloom-buttonHover">Cómo se juega</h4>
-                            <p class="text-sm opacity-80 leading-relaxed" x-text="selectedSport?.details?.howToPlay"></p>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-sm uppercase tracking-wider mb-3 text-bloom-buttonHover">Reglas Principales</h4>
-                        <ul class="list-disc list-inside space-y-1.5 text-sm opacity-80">
-                            <template x-for="rule in selectedSport?.details?.rules">
-                                <li x-text="rule"></li>
-                            </template>
-                        </ul>
-                    </div>
-                </div>
 
-                <div x-show="tab === 'history'" x-cloak>
-                    <div class="space-y-4 text-sm opacity-80 leading-relaxed">
-                        <p><strong class="text-bloom-text">Origen Geográfico:</strong> <span x-text="selectedSport?.details?.origin"></span></p>
-                        <p><strong class="text-bloom-text">Reseña Histórica:</strong> <span x-text="selectedSport?.details?.history"></span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- VISTA: CALENDARIO -->
-        <div x-show="page === 'calendario'" x-cloak x-transition.opacity.duration.500ms>
-            <div class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h2 class="font-sport text-4xl font-bold uppercase italic tracking-wider">Calendario Académico</h2>
-                    <p class="text-sm opacity-70 mt-1">Fechas importantes, entregas y eventos del ciclo.</p>
-                </div>
-                <div class="flex items-center gap-4 bg-white/70 backdrop-blur px-4 py-2 rounded-xl border border-bloom-text/10">
-                    <button @click="prevMonth()" class="material-symbols-outlined cursor-pointer hover:opacity-60">chevron_left</button>
-                    <span class="font-sport font-bold uppercase italic tracking-wider text-lg min-w-[140px] text-center" x-text="monthNames[currentMonth] + ' ' + currentYear"></span>
-                    <button @click="nextMonth()" class="material-symbols-outlined cursor-pointer hover:opacity-60">chevron_right</button>
-                </div>
-            </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2 bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-bloom-text/10 shadow-sm">
-                    <div class="grid grid-cols-7 gap-2 mb-4 text-center font-bold text-xs uppercase tracking-widest opacity-60">
-                        <div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div><div>Dom</div>
-                    </div>
-                    <div class="grid grid-cols-7 gap-2">
-                        <template x-for="blank in blankDays">
-                            <div class="h-20 bg-transparent"></div>
-                        </template>
-                        <template x-for="day in daysInMonth" :key="day">
-                            <div class="h-20 p-2 rounded-lg border border-bloom-text/5 flex flex-col justify-between transition-all"
-                                 :class="isToday(day) ? 'bg-bloom-button/20 border-bloom-button' : 'bg-white/40'">
-                                <span class="font-bold text-xs" :class="isToday(day) ? 'text-bloom-buttonHover font-black' : ''" x-text="day"></span>
-                                <template x-if="hasEvent(day)">
-                                    <div class="w-2 h-2 rounded-full bg-bloom-buttonHover self-center mb-1"></div>
-                                </template>
-                            </div>
-                        </template>
-                    </div>
-                </div>
 
-                <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-bloom-text/10 shadow-sm flex flex-col">
-                    <h3 class="font-sport text-xl font-bold uppercase italic tracking-wide mb-4 pb-2 border-b border-bloom-text/10">Eventos del Mes</h3>
-                    <div class="space-y-4 overflow-y-auto max-h-[350px]">
-                        <template x-for="ev in filteredEvents" :key="ev.id">
-                            <div class="p-3 rounded-lg bg-bloom-bg/40 border border-bloom-text/5">
-                                <div class="flex justify-between items-center text-xs font-bold text-bloom-buttonHover mb-1">
-                                    <span x-text="ev.day + ' de ' + monthNames[ev.monthId]"></span>
-                                </div>
-                                <h4 class="font-bold text-sm" x-text="ev.title"></h4>
-                                <p class="text-xs opacity-70 mt-0.5" x-text="ev.desc"></p>
-                            </div>
-                        </template>
-                        <template x-if="filteredEvents.length === 0">
-                            <p class="text-xs opacity-50 italic text-center py-6">No hay eventos programados para este mes.</p>
-                        </template>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- VISTA: PERFIL -->
-        <div x-show="page === 'perfil'" x-cloak x-transition.opacity.duration.500ms>
-            <div class="mb-10">
-                <h2 class="font-sport text-4xl font-bold uppercase italic tracking-wider">Mi Perfil</h2>
-                <p class="text-sm opacity-70 mt-1">Gestión de datos personales y preferencias de sesión.</p>
-            </div>
-
-            <div class="max-w-2xl bg-white/80 backdrop-blur-md p-8 rounded-2xl border border-bloom-text/10 shadow-sm space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">Nombre Completo</label>
-                        <input type="text" x-model="user.name" class="w-full px-4 py-2.5 rounded-lg border border-bloom-text/20 bg-white/60 text-sm focus:outline-none focus:ring-2 focus:ring-bloom-button">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">Correo Electrónico</label>
-                        <input type="email" x-model="user.email" class="w-full px-4 py-2.5 rounded-lg border border-bloom-text/20 bg-white/60 text-sm focus:outline-none focus:ring-2 focus:ring-bloom-button">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">Tipo de Documento</label>
-                        <input type="text" x-model="user.tipoDoc" class="w-full px-4 py-2.5 rounded-lg border border-bloom-text/20 bg-white/60 text-sm focus:outline-none focus:ring-2 focus:ring-bloom-button">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider opacity-60 mb-2">Número de Documento</label>
-                        <input type="text" x-model="user.numDoc" class="w-full px-4 py-2.5 rounded-lg border border-bloom-text/20 bg-white/60 text-sm focus:outline-none focus:ring-2 focus:ring-bloom-button">
-                    </div>
-                </div>
-
-                <div class="pt-4 border-t border-bloom-text/10 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <input type="checkbox" id="darkToggle" x-model="darkMode" class="w-4 h-4 accent-bloom-button">
-                        <label for="darkToggle" class="text-sm font-medium cursor-pointer">Modo Oscuro</label>
-                    </div>
-                    <button @click="alert('Cambios guardados correctamente')" class="bg-bloom-button hover:bg-bloom-buttonHover text-bloom-text px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-colors cursor-pointer shadow-sm">
-                        Guardar Cambios
-                    </button>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Footer -->
     <footer x-cloak x-transition
+
             class="w-full mt-auto border-t py-8 transition-colors duration-300"
+
             :class="darkMode ? 'bg-[#1e1e1e] border-white/10 text-gray-400' : 'bg-white border-bloom-text/10 text-bloom-text/70'">
+
         <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+
            
+
             <div class="flex items-center gap-2 font-sans">
+
                 <span class="font-bold tracking-wider uppercase" :class="darkMode ? 'text-white' : 'text-bloom-text'">© 2026 CEB Portal.</span>
+
                 <span>Todos los derechos reservados.</span>
+
             </div>
+
+
 
             <div class="flex gap-6 font-sport tracking-widest uppercase italic font-bold">
+
                 <button @click="navigate('inicio')" class="hover:text-bloom-buttonHover transition-colors cursor-pointer">Inicio</button>
+
                 <button @click="navigate('anuncios')" class="hover:text-bloom-buttonHover transition-colors cursor-pointer">Anuncios</button>
+
                 <button @click="navigate('deportes')" class="hover:text-bloom-buttonHover transition-colors cursor-pointer">Deportes</button>
+
                 <button @click="navigate('calendario')" class="hover:text-bloom-buttonHover transition-colors cursor-pointer">Calendario</button>
+
             </div>
 
+
+
             <template x-if="userRole">
+
                 <div class="font-sans text-[11px] uppercase tracking-widest bg-bloom-bg/30 px-3 py-1 rounded border border-current opacity-60">
+
                     Sesión: <span class="font-bold" x-text="userRole"></span>
+
                 </div>
+
             </template>
+
+
+
         </div>
+
     </footer>
 
-    <!-- Lógica Alpine.js -->
+
+
     <script>
+
         function cebPortalApp() {
+
             const todayObj = new Date();
 
+
+
             return {
+
                 page: 'inicio',
+
                 userRole: "Estudiante",
+
                
+
                 darkMode: false,
+
                 notifications: true,
+
                 showToast: false,
+
                
+
                 searchQuery: '',
+
                 mobileMenuOpen: false,
+
                 selectedSport: null,
 
+
+
                 user: {
+
                     name: "Kevin Paez",
+
                     email: "kevinwebpaez@gmail.com",
+
                     tipoDoc: "Cédula de Ciudadanía",
+
                     numDoc: "1000000000",
+
                     telefono: "+57 300 000 0000"
+
                 },
 
+
+
                 currentMonth: todayObj.getMonth(),
+
                 currentYear: todayObj.getFullYear(),
+
                 realTodayDay: todayObj.getDate(),
+
                 realTodayMonth: todayObj.getMonth(),
+
                 realTodayYear: todayObj.getFullYear(),
+
+
 
                 monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
 
+
+
                 get daysInMonth() {
+
                     const total = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
+
                     let arr = [];
+
                     for(let d = 1; d <= total; d++) { arr.push(d); }
+
                     return arr;
+
                 },
+
+
 
                 get blankDays() {
+
                     let firstDayIndex = new Date(this.currentYear, this.currentMonth, 1).getDay();
+
                     let offset = firstDayIndex === 0 ? 6 : firstDayIndex - 1;
+
                     let blanks = [];
+
                     for(let b = 0; b < offset; b++) { blanks.push(b); }
+
                     return blanks;
+
                 },
+
+
 
                 eventsData: [
+
                     { id: 1, year: 2026, monthId: 3, day: 25, title: 'SIRS: Entrega Final', desc: 'Documentación técnica y prototipo de software.' },
+
                     { id: 2, year: 2026, monthId: 3, day: 28, title: 'Prueba Trimestral', desc: 'Evaluación presencial de bases de datos.' },
+
                     { id: 3, year: 2026, monthId: 4, day: 15, title: 'Día de la Ciencia', desc: 'Muestra de proyectos tecnológicos y laboratorios.' },
+
                     { id: 4, year: 2026, monthId: 5, day: 10, title: 'Intercolegiados', desc: 'Apertura del campeonato regional de fútbol.' }
+
                 ],
+
+
 
                 prevMonth() {
+
                     if (this.currentMonth === 0) {
+
                         this.currentMonth = 11;
+
                         this.currentYear--;
+
                     } else {
+
                         this.currentMonth--;
+
                     }
+
                 },
+
+
 
                 nextMonth() {
+
                     if (this.currentMonth === 11) {
+
                         this.currentMonth = 0;
+
                         this.currentYear++;
+
                     } else {
+
                         this.currentMonth++;
+
                     }
+
                 },
+
+
 
                 hasEvent(day) {
+
                     return this.eventsData.some(e => e.year === this.currentYear && e.monthId === this.currentMonth && e.day === day);
+
                 },
+
+
 
                 isToday(day) {
+
                     return this.realTodayDay === day && this.realTodayMonth === this.currentMonth && this.realTodayYear === this.currentYear;
+
                 },
+
+
 
                 get filteredEvents() {
+
                     return this.eventsData.filter(e => e.year === this.currentYear && e.monthId === this.currentMonth);
+
                 },
+
+
 
                 announcements: [
+
                     { id: 1, type: 'academico', date: 'HOY', title: 'Actualización de Bitácoras', desc: 'Recuerden subir sus bitácoras de seguimiento antes del próximo viernes. Es obligatorio para el cierre.' },
+
                     { id: 2, type: 'institucional', date: '12 ABR', title: 'Reglamento Actualizado 2026', desc: 'Ya disponible para descarga el nuevo manual de convivencia académica. Por favor leer secciones modificadas.' },
+
                     { id: 3, type: 'academico', date: '05 ABR', title: 'Apertura de Biblioteca Virtual', desc: 'Nuevos recursos bibliográficos han sido añadidos a la plataforma digital para todas las facultades.' }
+
                 ],
+
+
 
                 sportsData: [
+
                     {
+
                         id: 1,
+
                         name: 'Fútbol',
+
                         icon: 'sports_soccer',
+
                         schedule: 'Mar y Jue - 4:00 PM',
+
                         bgStyle: 'from-[#2a3c2a] to-[#436543]',
+
                         desc: 'Formación táctica, preparación física e inscripciones abiertas para el torneo intercolegial regional. ¡Arma tu plantilla!',
+
                         coach: 'Prof. Alejandro Silva',
+
                         location: 'Cancha Principal Sintética',
+
                         slots: 8,
+
                         enrolled: false,
+
                         details: {
+
                             definition: 'Deporte de equipo jugado entre dos conjuntos de 11 jugadores cuyo objetivo es introducir el balón en la portería contraria usando cualquier parte del cuerpo excepto manos y brazos.',
+
                             howToPlay: 'Se disputa en un terreno rectangular de césped mediante pases, carreras y estrategias colectivas para burlar la defensa contraria durante dos tiempos de 45 minutos.',
+
                             rules: [
+
                                 'No tocar el balón con las manos (excepto el portero en su área).',
+
                                 'El fuera de juego sanciona al atacante más adelantado que el último defensa.',
+
                                 'Las faltas graves se penalizan con tarjeta amarilla o roja (expulsión).'
+
                             ],
+
                             origin: 'Inglaterra (Reino Unido)',
+
                             history: 'Aunque existían juegos similares ancestrales, las reglas modernas se unificaron en 1863 en Londres, fundando la Football Association (FA).'
+
                         }
+
                     },
+
                     {
+
                         id: 2,
+
                         name: 'Voleibol',
+
                         icon: 'sports_volleyball',
+
                         schedule: 'Lun y Mie - 3:30 PM',
+
                         bgStyle: 'from-[#2e3a59] to-[#4a5d8c]',
+
                         desc: 'Técnicas de recepción, saque y juego en equipo. Categorías mixtas disponibles para todos los niveles de experiencia.',
+
                         coach: 'Lic. Milena Castro',
+
                         location: 'Coliseo Cubierto - Zona Sur',
+
                         slots: 15,
+
                         enrolled: false,
+
                         details: {
+
                             definition: 'Deporte de pista donde dos equipos de 6 integrantes se enfrentan sobre un terreno liso separados por una red central, intentando que el balón toque el suelo del campo oponente.',
+
                             howToPlay: 'El balón se impulsa mediante golpes limpios. Cada equipo dispone de un máximo de tres toques para devolver el balón hacia el campo contrario.',
+
                             rules: [
+
                                 'El balón debe ser golpeado, no sujetado ni retenido.',
+
                                 'Un mismo jugador no puede golpear el balón dos veces consecutivas.',
+
                                 'Los jugadores deben rotar sus posiciones en el sentido de las agujas del reloj al recuperar el saque.'
+
                             ],
+
                             origin: 'Massachusetts, Estados Unidos',
+
                             history: 'Fue inventado en 1895 por William G. Morgan, un director de educación física de la YMCA, originalmente bajo el nombre de "Mintonette" como alternativa de menor impacto al básquet.'
+
                         }
+
                     },
+
                     {
+
                         id: 3,
+
                         name: 'Básquet',
+
                         icon: 'sports_basketball',
+
                         schedule: 'Viernes - 2:00 PM',
+
                         bgStyle: 'from-[#50301a] to-[#804c29]',
+
                         desc: 'Fundamentos de dribbling, lanzamientos y sistemas de juego. Inscripciones activas para el torneo relámpago de fin de ciclo.',
+
                         coach: 'Prof. Carlos Mendoza',
+
                         location: 'Coliseo Cubierto - Cancha 1',
+
                         slots: 5,
+
                         enrolled: false,
+
                         details: {
+
                             definition: 'Deporte de ráfaga jugado por dos plantillas de 5 basquetbolistas activos en cancha, enfocado en anotar puntos introduciendo la pelota por un aro suspendido a 3.05 metros.',
+
                             howToPlay: 'Se avanza botando (rebotando) de forma continua el balón contra el suelo o mediante pases a los compañeros. Las anotaciones valen 2 o 3 puntos según la distancia del tiro.',
+
                             rules: [
+
                                 'No se puede correr sosteniendo el balón en las manos sin dar botes (caminar).',
+
                                 'Una vez dejas de botar la pelota, solo puedes pivotar o lanzar/pasar; no volver a botar (dobles).',
+
                                 'El contacto físico excesivo o ilegal se sanciona como falta personal.'
+
                             ],
+
                             origin: 'Springfield, Massachusetts (EE. UU.)',
+
                             history: 'Creado en diciembre de 1891 por el clérigo e instructor canadiense James Naismith, quien buscaba una actividad bajo techo para mantener activos a sus alumnos durante el crudo invierno.'
+
                         }
+
                     }
+
                 ],
 
+
+
                 get filteredAnnouncements() {
+
                     if (this.searchQuery === '') return this.announcements;
+
                     return this.announcements.filter(a =>
+
                         a.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+
                         a.desc.toLowerCase().includes(this.searchQuery.toLowerCase())
+
                     );
+
                 },
+
+
 
                 isAdminOrProf() {
+
                     return this.userRole === 'Administrador' || this.userRole === 'Profesor';
+
                 },
+
+
 
                 navigate(targetPage) {
+
                     this.page = targetPage;
+
                     this.searchQuery = '';
+
                     window.scrollTo({ top: 0, behavior: 'smooth' });
+
                 },
+
+
 
                 viewSportDetails(sport) {
+
                     this.selectedSport = sport;
+
                     this.navigate('deporte-detalle');
+
                 },
 
+
+
                 toggleEnrollment(sport) {
+
                     if (sport.enrolled) {
+
                         sport.enrolled = false;
+
                         sport.slots++;
+
                     } else {
+
                         if (sport.slots > 0) {
+
                             sport.enrolled = true;
+
                             sport.slots--;
+
                         }
+
                     }
+
                 }
+
             }
+
         }
+
     </script>
+
 </body>
-</html>
+
+</html> 
+

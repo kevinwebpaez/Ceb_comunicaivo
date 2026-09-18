@@ -162,7 +162,7 @@
             </div>
         </div>
 
-        <!-- VISTA: SECCIÓN CALENDARIO CON CRUD COMPLETO (ÚNICO LUGAR DONDE APARECE) -->
+        <!-- VISTA: SECCIÓN CALENDARIO CON CRUD COMPLETO Y PERSISTENCIA -->
         <div x-show="page === 'calendario'" x-cloak x-transition>
             
             <!-- Encabezado con Botón de Nuevo Evento -->
@@ -180,7 +180,7 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 
-                <!-- Left Card: Componente del Calendario interactivo -->
+                <!-- Left Card: Componente del Calendario interactivo completo -->
                 <div class="lg:col-span-8 bg-white/90 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-sm border border-neutral-100">
                     <div class="flex items-center justify-between mb-8">
                         <h2 class="text-xl md:text-2xl font-bold tracking-tight text-neutral-900" x-text="monthNames[currentMonth] + ' ' + currentYear"></h2>
@@ -348,7 +348,6 @@
                 mobileMenuOpen: false,
                 selectedSport: null,
                 
-                // Variables de Control para el Calendario y CRUD de Eventos
                 selectedDay: null,
                 modalOpen: false,
                 isEditing: false,
@@ -385,12 +384,17 @@
                     return blanks;
                 },
 
-                eventsData: [
+                // Eventos sincronizados con localStorage
+                eventsData: JSON.parse(localStorage.getItem('ceb_events')) || [
                     { id: 1, year: 2026, monthId: 8, day: 25, title: 'SIRS: Entrega Final', desc: 'Documentación técnica y prototipo de software.' },
                     { id: 2, year: 2026, monthId: 8, day: 28, title: 'Prueba Trimestral', desc: 'Evaluación presencial de bases de datos.' },
                     { id: 3, year: 2026, monthId: 9, day: 15, title: 'Día de la Ciencia', desc: 'Muestra de proyectos tecnológicos y laboratorios.' },
                     { id: 4, year: 2026, monthId: 9, day: 22, title: 'Intercolegiados', desc: 'Apertura del campeonato regional de fútbol.' }
                 ],
+
+                saveToLocalStorage() {
+                    localStorage.setItem('ceb_events', JSON.stringify(this.eventsData));
+                },
 
                 prevMonth() {
                     if (this.currentMonth === 0) {
@@ -456,12 +460,14 @@
                     } else {
                         this.eventsData.push({ ...this.eventForm, id: Date.now() });
                     }
+                    this.saveToLocalStorage();
                     this.modalOpen = false;
                 },
 
                 deleteEvent(id) {
                     if (confirm('¿Estás seguro de eliminar este evento?')) {
                         this.eventsData = this.eventsData.filter(e => e.id !== id);
+                        this.saveToLocalStorage();
                     }
                 },
 

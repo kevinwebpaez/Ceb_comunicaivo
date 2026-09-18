@@ -145,14 +145,15 @@
             </div>
         </div>
 
-        <!-- VISTA: SECCIÓN CALENDARIO -->
+     <!-- VISTA: SECCIÓN CALENDARIO -->
         <div x-show="page === 'calendario'" x-cloak x-transition>
             <h1 class="text-3xl md:text-4xl font-extrabold italic text-center tracking-wide mb-10">
                 CALENDARIO
             </h1>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                <!-- Left Card: Calendar Component -->
+                
+                <!-- Left Card: Componente del Calendario interactivo -->
                 <div class="lg:col-span-8 bg-white/90 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-sm border border-neutral-100">
                     <div class="flex items-center justify-between mb-8">
                         <h2 class="text-xl md:text-2xl font-bold tracking-tight text-neutral-900" x-text="monthNames[currentMonth] + ' ' + currentYear"></h2>
@@ -170,37 +171,65 @@
                         <div>LUN</div><div>MAR</div><div>MIÉ</div><div>JUE</div><div>VIE</div><div>SÁB</div><div>DOM</div>
                     </div>
 
-                    <div class="grid grid-cols-7 gap-y-4 text-center text-sm font-medium text-neutral-700">
+                    <div class="grid grid-cols-7 gap-y-3 text-center text-sm font-medium text-neutral-700">
                         <template x-for="blank in blankDays">
                             <div></div>
                         </template>
                         <template x-for="day in daysInMonth" :key="day">
-                            <div class="py-2 flex flex-col items-center justify-center relative cursor-pointer group transition rounded-lg"
-                                 :class="{ 'bg-amber-100/60 font-bold text-amber-600': hasEvent(day), 'hover:bg-neutral-100': !hasEvent(day) }">
+                            <div @click="selectDay(day)"
+                                 class="py-3 flex flex-col items-center justify-center relative cursor-pointer group transition rounded-xl border border-transparent"
+                                 :class="{
+                                     'bg-amber-500 text-white font-bold shadow-md': selectedDay === day,
+                                     'bg-amber-100/70 font-bold text-amber-800 border-amber-200': hasEvent(day) && selectedDay !== day,
+                                     'hover:bg-neutral-100': !hasEvent(day) && selectedDay !== day
+                                 }">
                                 <span x-text="day"></span>
-                                <span x-show="hasEvent(day)" class="absolute bottom-1 w-1 h-1 bg-amber-500 rounded-full"></span>
+                                <span x-show="hasEvent(day) && selectedDay !== day" class="absolute bottom-1.5 w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
+                                <span x-show="selectedDay === day && hasEvent(day)" class="absolute bottom-1.5 w-1.5 h-1.5 bg-white rounded-full"></span>
                             </div>
                         </template>
                     </div>
                 </div>
 
-                <!-- Right Card: Upcoming Events Component -->
-                <div class="lg:col-span-4 bg-white/90 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-sm border border-neutral-100">
-                    <h3 class="text-xs font-bold tracking-widest uppercase text-neutral-400 mb-6">
-                        PRÓXIMOS EVENTOS
-                    </h3>
-                    <div class="space-y-4">
-                        <template x-for="event in filteredEvents" :key="event.id">
-                            <div class="bg-neutral-50/80 hover:bg-neutral-100/60 p-4 rounded-xl transition border border-neutral-100/80 flex gap-4 items-start">
-                                <span class="text-xl font-extrabold text-amber-500 leading-none pt-0.5" x-text="event.day"></span>
-                                <div>
-                                    <h4 class="text-xs font-bold text-neutral-900 uppercase" x-text="event.title"></h4>
-                                    <p class="text-xs text-neutral-500 mt-1" x-text="event.desc"></p>
+                <!-- Right Card: Panel Dinámico de Eventos por Fecha -->
+                <div class="lg:col-span-4 bg-white/90 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-sm border border-neutral-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xs font-bold tracking-widest uppercase text-neutral-400"
+                                x-text="selectedDay ? 'EVENTOS EL ' + selectedDay + ' DE ' + monthNames[currentMonth].toUpperCase() : 'PRÓXIMOS EVENTOS'">
+                            </h3>
+                            <template x-if="selectedDay !== null">
+                                <button @click="selectedDay = null" class="text-xs font-bold text-amber-600 hover:underline cursor-pointer">
+                                    Ver todo el mes
+                                </button>
+                            </template>
+                        </div>
+
+                        <div class="space-y-4 max-h-[380px] overflow-y-auto pr-1">
+                            <template x-for="event in filteredEvents" :key="event.id">
+                                <div class="bg-neutral-50/90 hover:bg-neutral-100/80 p-4 rounded-xl transition border border-neutral-100 flex gap-4 items-start shadow-2xs">
+                                    <span class="text-xl font-extrabold text-amber-500 leading-none pt-0.5" x-text="event.day"></span>
+                                    <div>
+                                        <h4 class="text-xs font-bold text-neutral-900 uppercase" x-text="event.title"></h4>
+                                        <p class="text-xs text-neutral-500 mt-1 leading-relaxed" x-text="event.desc"></p>
+                                    </div>
                                 </div>
-                            </div>
-                        </template>
+                            </template>
+
+                            <template x-if="filteredEvents.length === 0">
+                                <div class="text-center py-12 text-neutral-400">
+                                    <span class="material-symbols-outlined text-4xl mb-2 opacity-40">event_busy</span>
+                                    <p class="text-xs font-medium">No hay eventos programados para esta fecha.</p>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-4 border-t border-neutral-100 text-center">
+                        <span class="text-[11px] text-neutral-400 italic">Haz clic en cualquier fecha del calendario para filtrar.</span>
                     </div>
                 </div>
+
             </div>
         </div>
 

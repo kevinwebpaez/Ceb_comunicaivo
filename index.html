@@ -145,7 +145,7 @@
             </div>
         </div>
 
-<!-- VISTA: SECCIÓN CALENDARIO CON CRUD COMPLETO -->
+        <!-- VISTA: SECCIÓN CALENDARIO CON CRUD COMPLETO -->
         <div x-show="page === 'calendario'" x-cloak x-transition>
             
             <!-- Encabezado con Botón de Nuevo Evento -->
@@ -187,12 +187,12 @@
                         </template>
                         <template x-for="day in daysInMonth" :key="day">
                             <div @click="selectDay(day)"
-                                 class="py-3 flex flex-col items-center justify-center relative cursor-pointer group transition rounded-xl border border-transparent"
-                                 :class="{
-                                     'bg-amber-500 text-white font-bold shadow-md': selectedDay === day,
-                                     'bg-amber-100/70 font-bold text-amber-800 border-amber-200': hasEvent(day) && selectedDay !== day,
-                                     'hover:bg-neutral-100': !hasEvent(day) && selectedDay !== day
-                                 }">
+                                   class="py-3 flex flex-col items-center justify-center relative cursor-pointer group transition rounded-xl border border-transparent"
+                                   :class="{
+                                       'bg-amber-500 text-white font-bold shadow-md': selectedDay === day,
+                                       'bg-amber-100/70 font-bold text-amber-800 border-amber-200': hasEvent(day) && selectedDay !== day,
+                                       'hover:bg-neutral-100': !hasEvent(day) && selectedDay !== day
+                                   }">
                                 <span x-text="day"></span>
                                 <span x-show="hasEvent(day) && selectedDay !== day" class="absolute bottom-1.5 w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
                                 <span x-show="selectedDay === day && hasEvent(day)" class="absolute bottom-1.5 w-1.5 h-1.5 bg-white rounded-full"></span>
@@ -289,9 +289,6 @@
             </div>
         </div>
 
-        <!-- [SUGERENCIA]: AQUÍ PUEDES AGREGAR NUEVAS VISTAS PARA TUS SECCIONES NUEVAS -->
-        <!-- Ejemplo: <div x-show="page === 'tu_nueva_seccion'" x-cloak x-transition> ... contenido ... </div> -->
-
     </main>
 
     <!-- ========================================================================= -->
@@ -337,6 +334,9 @@
                 searchQuery: '',
                 mobileMenuOpen: false,
                 selectedSport: null,
+                selectedDay: null,
+                modalOpen: false,
+                isEditing: false,
 
                 user: {
                     name: "Kevin Paez",
@@ -353,6 +353,15 @@
                 realTodayYear: todayObj.getFullYear(),
 
                 monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+
+                eventForm: {
+                    id: null,
+                    title: '',
+                    day: 1,
+                    monthId: todayObj.getMonth(),
+                    year: todayObj.getFullYear(),
+                    desc: ''
+                },
 
                 get daysInMonth() {
                     const total = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
@@ -383,6 +392,7 @@
                     } else {
                         this.currentMonth--;
                     }
+                    this.selectedDay = null;
                 },
 
                 nextMonth() {
@@ -392,6 +402,11 @@
                     } else {
                         this.currentMonth++;
                     }
+                    this.selectedDay = null;
+                },
+
+                selectDay(day) {
+                    this.selectedDay = this.selectedDay === day ? null : day;
                 },
 
                 hasEvent(day) {
@@ -403,7 +418,46 @@
                 },
 
                 get filteredEvents() {
-                    return this.eventsData.filter(e => e.year === this.currentYear && e.monthId === this.currentMonth);
+                    let list = this.eventsData.filter(e => e.year === this.currentYear && e.monthId === this.currentMonth);
+                    if (this.selectedDay !== null) {
+                        list = list.filter(e => e.day === this.selectedDay);
+                    }
+                    return list;
+                },
+
+                openAddModal() {
+                    this.isEditing = false;
+                    this.eventForm = {
+                        id: Date.now(),
+                        title: '',
+                        day: this.selectedDay || 1,
+                        monthId: this.currentMonth,
+                        year: this.currentYear,
+                        desc: ''
+                    };
+                    this.modalOpen = true;
+                },
+
+                openEditModal(event) {
+                    this.isEditing = true;
+                    this.eventForm = { ...event };
+                    this.modalOpen = true;
+                },
+
+                saveEvent() {
+                    if (this.isEditing) {
+                        const index = this.eventsData.findIndex(e => e.id === this.eventForm.id);
+                        if (index !== -1) {
+                            this.eventsData[index] = { ...this.eventForm };
+                        }
+                    } else {
+                        this.eventsData.push({ ...this.eventForm, id: Date.now() });
+                    }
+                    this.modalOpen = false;
+                },
+
+                deleteEvent(id) {
+                    this.eventsData = this.eventsData.filter(e => e.id !== id);
                 },
 
                 navigate(targetPage) {

@@ -214,12 +214,6 @@
                 <button @click="navigate('deportes')" class="hover:text-bloom-buttonHover transition-colors cursor-pointer">Deportes</button>
                 <button @click="navigate('calendario')" class="hover:text-bloom-buttonHover transition-colors cursor-pointer">Calendario</button>
             </div>
-
-            <template x-if="userRole">
-                <div class="font-sans text-[11px] uppercase tracking-widest bg-bloom-bg/30 px-3 py-1 rounded border border-current opacity-60">
-                    Sesión: <span class="font-bold" x-text="userRole"></span>
-                </div>
-            </template>
         </div>
     </footer>
 

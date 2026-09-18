@@ -145,16 +145,16 @@
             </div>
         </div>
 
- <!-- VISTA: SECCIÓN CALENDARIO CON CRUD -->
+<!-- VISTA: SECCIÓN CALENDARIO CON CRUD COMPLETO -->
         <div x-show="page === 'calendario'" x-cloak x-transition>
             
-            <!-- Encabezado con el Botón de Nuevo Evento visible -->
+            <!-- Encabezado con Botón de Nuevo Evento -->
             <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4 bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-neutral-100">
                 <div>
                     <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-neutral-900">
                         CALENDARIO Y EVENTOS
                     </h1>
-                    <p class="text-xs text-neutral-500 mt-1">Gestiona, crea y programa las actividades del portal.</p>
+                    <p class="text-xs text-neutral-500 mt-1">Gestiona, crea, edita y programa las actividades del portal.</p>
                 </div>
                 <button @click="openAddModal()" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-white px-5 py-2.5 font-bold text-xs uppercase tracking-wider rounded-xl transition cursor-pointer flex items-center justify-center gap-2 shadow-sm">
                     <span class="material-symbols-outlined text-base">add_circle</span> Nuevo Evento
@@ -283,47 +283,6 @@
                         <div class="flex justify-end gap-3 pt-4 border-t border-neutral-100">
                             <button type="button" @click="modalOpen = false" class="px-4 py-2 text-xs font-bold text-neutral-600 bg-neutral-100 rounded-lg hover:bg-neutral-200 cursor-pointer">Cancelar</button>
                             <button type="submit" class="px-4 py-2 text-xs font-bold text-white bg-amber-500 hover:bg-amber-600 rounded-lg cursor-pointer" x-text="isEditing ? 'Guardar Cambios' : 'Crear Evento'"></button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-            <!-- MODAL PARA CREAR O EDITAR EVENTO (CRUD Modal) -->
-            <div x-show="modalOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
-                <div @click.away="modalOpen = false" class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-neutral-100">
-                    <h3 class="text-lg font-bold text-neutral-900 mb-4" x-text="isEditing ? 'Editar Evento' : 'Crear Nuevo Evento'"></h3>
-                    
-                    <form @submit.prevent="saveEvent()" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-neutral-500 mb-1">Título del Evento</label>
-                            <input type="text" x-model="eventForm.title" required class="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500">
-                        </div>
-                        <div class="grid grid-cols-3 gap-3">
-                            <div>
-                                <label class="block text-xs font-bold uppercase text-neutral-500 mb-1">Día</label>
-                                <input type="number" min="1" max="31" x-model.number="eventForm.day" required class="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold uppercase text-neutral-500 mb-1">Mes</label>
-                                <select x-model.number="eventForm.monthId" class="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500">
-                                    <template x-for="(mName, index) in monthNames">
-                                        <option :value="index" x-text="mName"></option>
-                                    </template>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold uppercase text-neutral-500 mb-1">Año</label>
-                                <input type="number" x-model.number="eventForm.year" required class="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-neutral-500 mb-1">Descripción</label>
-                            <textarea x-model="eventForm.desc" rows="3" class="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500"></textarea>
-                        </div>
-                        <div class="flex justify-end gap-3 pt-4 border-t border-neutral-100">
-                            <button type="button" @click="modalOpen = false" class="px-4 py-2 text-xs font-bold text-neutral-600 bg-neutral-100 rounded-lg hover:bg-neutral-200 cursor-pointer">Cancelar</button>
-                            <button type="submit" class="px-4 py-2 text-xs font-bold text-bloom-text bg-bloom-button rounded-lg hover:bg-bloom-buttonHover cursor-pointer" x-text="isEditing ? 'Guardar Cambios' : 'Crear Evento'"></button>
                         </div>
                     </form>
                 </div>

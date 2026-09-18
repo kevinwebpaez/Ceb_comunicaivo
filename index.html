@@ -137,7 +137,7 @@
             </div>
         </div>
 
-        <!-- VISTA: ANUNCIOS (Ejemplo de otra sección limpia) -->
+        <!-- VISTA: ANUNCIOS -->
         <div x-show="page === 'anuncios'" x-cloak x-transition>
             <div class="bg-white/90 backdrop-blur-md rounded-2xl p-8 shadow-sm border border-neutral-100">
                 <h1 class="text-3xl font-extrabold tracking-tight text-neutral-900 mb-4">ANUNCIOS</h1>
@@ -153,7 +153,16 @@
             </div>
         </div>
 
-        <!-- VISTA: SECCIÓN CALENDARIO CON CRUD COMPLETO (SOLO APARECE AQUÍ) -->
+        <!-- VISTA: PERFIL -->
+        <div x-show="page === 'perfil'" x-cloak x-transition>
+            <div class="bg-white/90 backdrop-blur-md rounded-2xl p-8 shadow-sm border border-neutral-100">
+                <h1 class="text-3xl font-extrabold tracking-tight text-neutral-900 mb-4">MI PERFIL</h1>
+                <p class="text-sm text-neutral-600" x-text="'Nombre: ' + user.name"></p>
+                <p class="text-sm text-neutral-600" x-text="'Correo: ' + user.email"></p>
+            </div>
+        </div>
+
+        <!-- VISTA: SECCIÓN CALENDARIO CON CRUD COMPLETO Y PERSISTENCIA -->
         <div x-show="page === 'calendario'" x-cloak x-transition>
             
             <!-- Encabezado con Botón de Nuevo Evento -->
@@ -324,7 +333,7 @@
         </div>
     </footer>
 
-    <!-- LÓGICA DE ALPINE.JS -->
+    <!-- LÓGICA DE ALPINE.JS CON LOCALSTORAGE -->
     <script>
         function cebPortalApp() {
             const todayObj = new Date();
@@ -339,7 +348,6 @@
                 mobileMenuOpen: false,
                 selectedSport: null,
                 
-                // Variables de Control para el Calendario y CRUD de Eventos
                 selectedDay: null,
                 modalOpen: false,
                 isEditing: false,
@@ -361,27 +369,18 @@
 
                 monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
 
-                get daysInMonth() {
-                    const total = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
-                    let arr = [];
-                    for(let d = 1; d <= total; d++) { arr.push(d); }
-                    return arr;
-                },
-
-                get blankDays() {
-                    let firstDayIndex = new Date(this.currentYear, this.currentMonth, 1).getDay();
-                    let offset = firstDayIndex === 0 ? 6 : firstDayIndex - 1;
-                    let blanks = [];
-                    for(let b = 0; b < offset; b++) { blanks.push(b); }
-                    return blanks;
-                },
-
-                eventsData: [
+                // Carga los eventos guardados en el navegador o usa los por defecto
+                eventsData: JSON.parse(localStorage.getItem('ceb_events')) || [
                     { id: 1, year: 2026, monthId: 8, day: 25, title: 'SIRS: Entrega Final', desc: 'Documentación técnica y prototipo de software.' },
                     { id: 2, year: 2026, monthId: 8, day: 28, title: 'Prueba Trimestral', desc: 'Evaluación presencial de bases de datos.' },
                     { id: 3, year: 2026, monthId: 9, day: 15, title: 'Día de la Ciencia', desc: 'Muestra de proyectos tecnológicos y laboratorios.' },
                     { id: 4, year: 2026, monthId: 9, day: 22, title: 'Intercolegiados', desc: 'Apertura del campeonato regional de fútbol.' }
                 ],
+
+                // Guarda automáticamente los cambios en localStorage
+                saveToLocalStorage() {
+                    localStorage.setItem('ceb_events', JSON.stringify(this.eventsData));
+                },
 
                 prevMonth() {
                     if (this.currentMonth === 0) {
@@ -447,12 +446,14 @@
                     } else {
                         this.eventsData.push({ ...this.eventForm, id: Date.now() });
                     }
+                    this.saveToLocalStorage();
                     this.modalOpen = false;
                 },
 
                 deleteEvent(id) {
                     if (confirm('¿Estás seguro de eliminar este evento?')) {
                         this.eventsData = this.eventsData.filter(e => e.id !== id);
+                        this.saveToLocalStorage();
                     }
                 },
 

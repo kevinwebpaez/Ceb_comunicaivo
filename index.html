@@ -66,7 +66,9 @@
         <div class="absolute inset-0 bg-[#e8e4d9] opacity-40 mix-blend-multiply" :class="darkMode ? 'bg-[#121212]' : 'bg-[#e8e4d9]'"></div>
     </div>
 
-    <!-- HEADER -->
+    <!-- ========================================================================= -->
+    <!-- [SUGERENCIA]: AQUÍ COMIENZA EL HEADER / BARRA DE NAVEGACIÓN PRINCIPAL (DESKTOP) -->
+    <!-- ========================================================================= -->
     <header x-transition x-cloak
             class="w-full absolute top-0 left-0 right-0 z-50 bg-transparent transition-all duration-300"
             :class="page === 'inicio' ? 'text-white' : 'text-bloom-text'">
@@ -77,6 +79,7 @@
                     <span class="font-sans font-bold text-xl tracking-[0.2em] uppercase">CEB Portal</span>
                 </div>
                
+                <!-- [SUGERENCIA]: AQUÍ ESTÁN LOS BOTONES DE NAVEGACIÓN SUPERIOR (INICIO, ANUNCIOS, ETC.) -->
                 <nav class="hidden md:flex space-x-8 lg:space-x-12 items-center">
                     <template x-for="navItem in ['inicio', 'anuncios', 'deportes', 'calendario']">
                         <button @click="navigate(navItem)"
@@ -102,11 +105,14 @@
         </div>
     </header>
 
-    <!-- MOBILE MENU -->
+    <!-- ========================================================================= -->
+    <!-- [SUGERENCIA]: AQUÍ COMIENZA EL MENÚ MÓVIL (PANTALLAS PEQUEÑAS) -->
+    <!-- ========================================================================= -->
     <div x-show="mobileMenuOpen" x-transition.opacity x-cloak class="fixed inset-0 bg-bloom-bg z-50 flex flex-col p-8 md:hidden text-bloom-text">
         <div class="flex justify-end mb-12">
             <button @click="mobileMenuOpen = false"><span class="material-symbols-outlined text-3xl">close</span></button>
         </div>
+        <!-- [SUGERENCIA]: MODIFICA O AGREGA TUS SECCIONES AQUÍ TAMBIÉN PARA MÓVILES -->
         <nav class="flex flex-col space-y-6 text-2xl font-sans font-black italic uppercase tracking-widest">
             <template x-for="navItem in ['inicio', 'anuncios', 'deportes', 'calendario', 'perfil']">
                 <button @click="navigate(navItem); mobileMenuOpen = false" class="text-left transition-colors"
@@ -117,10 +123,12 @@
         </nav>
     </div>
 
-    <!-- MAIN CONTENT -->
+    <!-- ========================================================================= -->
+    <!-- [SUGERENCIA]: AQUÍ COMIENZA EL CONTENIDO PRINCIPAL DE LAS PÁGINAS -->
+    <!-- ========================================================================= -->
     <main class="flex-1 w-full relative z-10" :class="page === 'inicio' ? '' : 'max-w-7xl mx-auto px-6 lg:px-12 pt-36 pb-12'">
 
-        <!-- INICIO HERO -->
+        <!-- VISTA: INICIO HERO -->
         <div x-show="page === 'inicio'" x-cloak x-transition.opacity.duration.500ms>
             <div class="relative w-full h-screen min-h-[600px] flex items-center justify-center text-center bg-black/40 backdrop-blur-[1px]">
                 <div class="relative z-10 p-6 flex flex-col items-center mt-12">
@@ -137,7 +145,7 @@
             </div>
         </div>
 
-        <!-- SECCIÓN CALENDARIO -->
+        <!-- VISTA: SECCIÓN CALENDARIO -->
         <div x-show="page === 'calendario'" x-cloak x-transition>
             <h1 class="text-3xl md:text-4xl font-extrabold italic text-center tracking-wide mb-10">
                 CALENDARIO
@@ -196,9 +204,14 @@
             </div>
         </div>
 
+        <!-- [SUGERENCIA]: AQUÍ PUEDES AGREGAR NUEVAS VISTAS PARA TUS SECCIONES NUEVAS -->
+        <!-- Ejemplo: <div x-show="page === 'tu_nueva_seccion'" x-cloak x-transition> ... contenido ... </div> -->
+
     </main>
 
-    <!-- FOOTER -->
+    <!-- ========================================================================= -->
+    <!-- [SUGERENCIA]: AQUÍ COMIENZA EL FOOTER (PIE DE PÁGINA) -->
+    <!-- ========================================================================= -->
     <footer x-cloak x-transition
             class="w-full mt-auto border-t py-8 transition-colors duration-300"
             :class="darkMode ? 'bg-[#1e1e1e] border-white/10 text-gray-400' : 'bg-white border-bloom-text/10 text-bloom-text/70'">
@@ -214,10 +227,18 @@
                 <button @click="navigate('deportes')" class="hover:text-bloom-buttonHover transition-colors cursor-pointer">Deportes</button>
                 <button @click="navigate('calendario')" class="hover:text-bloom-buttonHover transition-colors cursor-pointer">Calendario</button>
             </div>
+
+            <template x-if="userRole">
+                <div class="font-sans text-[11px] uppercase tracking-widest bg-bloom-bg/30 px-3 py-1 rounded border border-current opacity-60">
+                    Sesión: <span class="font-bold" x-text="userRole"></span>
+                </div>
+            </template>
         </div>
     </footer>
 
-    <!-- SCRIPT DE ALPINE.JS -->
+    <!-- ========================================================================= -->
+    <!-- [SUGERENCIA]: AQUÍ ESTÁ LA LÓGICA DE ALPINE.JS -->
+    <!-- ========================================================================= -->
     <script>
         function cebPortalApp() {
             const todayObj = new Date();

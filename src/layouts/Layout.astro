@@ -1,0 +1,63 @@
+---
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  current?: string;
+}
+
+const { title = 'CEB Portal', current = 'inicio' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const isHome = current === 'inicio';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <link rel="icon" href={`${base}/favicon.svg`} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&family=Oswald:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0"
+      rel="stylesheet"
+    />
+    <ClientRouter />
+  </head>
+  <body
+    class="antialiased min-h-screen flex flex-col relative font-sans text-bloom-text bg-cover bg-center bg-no-repeat bg-fixed"
+    style={`background-image: url('${base}/images/fondo.png')`}
+  >
+    {
+      !isHome && (
+        <div class="fixed inset-0 pointer-events-none z-0 bg-black/40 backdrop-blur-[1px]" />
+      )
+    }
+
+    <Header current={current} />
+
+    <main
+      class:list={[
+        'flex-1 w-full relative z-10',
+        !isHome && 'max-w-7xl mx-auto px-6 lg:px-12 pt-36 pb-12',
+      ]}
+    >
+      <slot />
+    </main>
+
+    <Footer />
+
+    <script>
+      import '../scripts/alpine.js';
+    </script>
+  </body>
+</html>

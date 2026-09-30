@@ -1,0 +1,37 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const links = [
+  { label: 'Inicio', href: `${base}/` },
+  { label: 'Anuncios', href: `${base}/anuncios` },
+  { label: 'Deportes', href: `${base}/deportes` },
+  { label: 'Calendario', href: `${base}/calendario` },
+];
+const userRole = 'Estudiante';
+---
+
+<footer class="w-full mt-auto border-t py-8 bg-white border-bloom-text/10 text-bloom-text/70 relative z-10">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+    <div class="flex items-center gap-2 font-sans">
+      <span class="font-bold tracking-wider uppercase text-bloom-text">© 2026 CEB Portal.</span>
+      <span>Todos los derechos reservados.</span>
+    </div>
+
+    <div class="flex gap-6 font-sport tracking-widest uppercase italic font-bold">
+      {
+        links.map((link) => (
+          <a href={link.href} class="hover:text-bloom-buttonHover transition-colors">
+            {link.label}
+          </a>
+        ))
+      }
+    </div>
+
+    {
+      userRole && (
+        <div class="font-sans text-[11px] uppercase tracking-widest bg-bloom-bg/30 px-3 py-1 rounded border border-current opacity-60">
+          Sesión: <span class="font-bold">{userRole}</span>
+        </div>
+      )
+    }
+  </div>
+</footer>

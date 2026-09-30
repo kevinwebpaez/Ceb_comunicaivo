@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+/* Colores y fuentes del portal (antes estaban en tailwind.config del CDN) */
+@theme {
+  --color-bloom-bg: #e8e4d9;
+  --color-bloom-button: #f6c358;
+  --color-bloom-buttonHover: #e3b145;
+  --color-bloom-text: #2d2d2d;
+  --color-bloom-light: #f4f1ea;
+  --color-periwinkle-500: #5c6bc0;
+
+  --font-sans: 'Inter', sans-serif;
+  --font-sport: 'Oswald', sans-serif;
+}
+
+/* Alpine: oculta elementos hasta que cargue */
+[x-cloak] {
+  display: none !important;
+}
+
+/* Íconos de Google Material Symbols */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar delgado */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d1cdc2; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #b0aba0; }
+

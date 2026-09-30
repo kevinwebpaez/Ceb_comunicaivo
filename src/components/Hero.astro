@@ -1,0 +1,20 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<div class="relative w-full h-screen min-h-[600px] flex items-center justify-center text-center bg-black/40 backdrop-blur-[1px]">
+  <div class="relative z-10 p-6 flex flex-col items-center mt-12">
+    <span class="font-sport text-3xl md:text-5xl text-bloom-button tracking-widest uppercase italic mb-4">
+      Bienvenidos al
+    </span>
+    <h1 class="font-sport text-6xl md:text-8xl font-bold text-white tracking-wider uppercase italic leading-tight mb-10 drop-shadow-md">
+      Portal CEB
+    </h1>
+    <a
+      href={`${base}/anuncios`}
+      class="bg-bloom-button text-bloom-text px-10 py-4 font-sport font-bold italic uppercase tracking-widest hover:bg-bloom-buttonHover hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg"
+    >
+      Explorar Anuncios
+    </a>
+  </div>
+</div>

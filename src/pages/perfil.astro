@@ -1,0 +1,16 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Tarjeta from '../components/Tarjeta.astro';
+
+const user = {
+  name: 'Kevin Paez',
+  email: 'kevinwebpaez@gmail.com',
+};
+---
+
+<Layout title="Mi Perfil | CEB Portal" current="perfil">
+  <Tarjeta titulo="MI PERFIL">
+    <p class="text-sm text-neutral-600">Nombre: {user.name}</p>
+    <p class="text-sm text-neutral-600">Correo: {user.email}</p>
+  </Tarjeta>
+</Layout>

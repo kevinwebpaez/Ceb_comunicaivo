@@ -1,0 +1,84 @@
+---
+interface Props {
+  current: string;
+}
+
+const { current } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const items = ['inicio', 'anuncios', 'deportes', 'calendario'];
+const href = (item: string) => (item === 'inicio' ? `${base}/` : `${base}/${item}`);
+---
+
+<div x-data="{ open: false }">
+  <!-- BARRA DE NAVEGACIÓN PRINCIPAL -->
+  <header class="w-full absolute top-0 left-0 right-0 z-50 bg-transparent text-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="flex justify-between items-center h-24">
+        <a href={href('inicio')} class="flex-shrink-0">
+          <span class="font-sans font-bold text-xl tracking-[0.2em] uppercase">CEB Portal</span>
+        </a>
+
+        <nav class="hidden md:flex space-x-8 lg:space-x-12 items-center">
+          {
+            items.map((item) => (
+              <a
+                href={href(item)}
+                class:list={[
+                  'text-[15px] font-black italic tracking-widest uppercase transition-all duration-300 hover:-translate-y-0.5 relative group',
+                  current === item ? 'text-white' : 'text-white/70 hover:text-white',
+                ]}
+              >
+                <span>{item}</span>
+                <span
+                  class:list={[
+                    'absolute -bottom-2 left-0 w-full h-[3px] bg-bloom-button transition-transform duration-300 origin-left',
+                    current === item ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100',
+                  ]}
+                />
+              </a>
+            ))
+          }
+        </nav>
+
+        <div class="hidden md:flex items-center gap-6">
+          <a href={`${base}/perfil`} class="text-[15px] font-medium transition-opacity hover:opacity-60">
+            Mi Perfil
+          </a>
+        </div>
+
+        <button class="md:hidden" @click="open = !open" aria-label="Abrir menú">
+          <span class="material-symbols-outlined text-3xl">menu</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MENÚ MÓVIL -->
+  <div
+    x-show="open"
+    x-transition.opacity
+    x-cloak
+    class="fixed inset-0 bg-bloom-bg z-50 flex flex-col p-8 md:hidden text-bloom-text"
+  >
+    <div class="flex justify-end mb-12">
+      <button @click="open = false" aria-label="Cerrar menú">
+        <span class="material-symbols-outlined text-3xl">close</span>
+      </button>
+    </div>
+    <nav class="flex flex-col space-y-6 text-2xl font-sans font-black italic uppercase tracking-widest">
+      {
+        [...items, 'perfil'].map((item) => (
+          <a
+            href={item === 'perfil' ? `${base}/perfil` : href(item)}
+            class:list={[
+              'text-left transition-colors',
+              current === item ? 'text-bloom-buttonHover' : 'text-bloom-text',
+            ]}
+          >
+            {item}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</div>

@@ -1,1 +1,94 @@
+---
+// Componente para la sección de Deportes con las tarjetas de Fútbol, Básquetbol y Voleibol
+---
 
+<div class="space-y-6">
+  <!-- Tarjeta de Cabecera Principal -->
+  <div class="bg-white/90 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/20">
+    <h1 class="text-2xl font-black text-gray-800 tracking-wide uppercase">DEPORTES</h1>
+    <p class="text-sm text-gray-600 mt-1">Sección de torneos, campeonatos y actividades deportivas</p>
+  </div>
+
+  <!-- Contenedor de las Tarjetas de los Deportes -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    
+    <!-- Fútbol -->
+    <div class="bg-white/90 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/20 flex flex-col justify-between hover:border-amber-500/50 transition-all duration-300">
+      <div>
+        <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-600 mb-4 font-bold text-xl">
+          ⚽
+        </div>
+        <h2 class="text-xl font-bold text-gray-800">Fútbol</h2>
+        <p class="text-sm text-gray-600 mt-2">Torneo intercursos y campeonato relámpago de fútbol sala masculino y femenino.</p>
+        
+        <div class="mt-4 space-y-2 text-xs text-gray-500">
+          <div class="flex justify-between py-1 border-b border-gray-100">
+            <span>Estado:</span>
+            <span class="font-semibold text-amber-600">En curso</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-gray-100">
+            <span>Próxima fecha:</span>
+            <span class="font-semibold text-gray-700">Viernes, 2:00 PM</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="mt-6 w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-xl text-sm transition-colors shadow-md shadow-amber-500/20">
+        Ver Equipos y Tabla
+      </button>
+    </div>
+
+    <!-- Básquetbol -->
+    <div class="bg-white/90 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/20 flex flex-col justify-between hover:border-amber-500/50 transition-all duration-300">
+      <div>
+        <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-600 mb-4 font-bold text-xl">
+          🏀
+        </div>
+        <h2 class="text-xl font-bold text-gray-800">Básquetbol</h2>
+        <p class="text-sm text-gray-600 mt-2">Encuentros de baloncesto 3x3 y torneos de habilidades en la cancha principal.</p>
+        
+        <div class="mt-4 space-y-2 text-xs text-gray-500">
+          <div class="flex justify-between py-1 border-b border-gray-100">
+            <span>Estado:</span>
+            <span class="font-semibold text-amber-600">Inscripciones abiertas</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-gray-100">
+            <span>Categoría:</span>
+            <span class="font-semibold text-gray-700">Mixto (Media)</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="mt-6 w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-xl text-sm transition-colors shadow-md shadow-amber-500/20">
+        Inscribir Equipo
+      </button>
+    </div>
+
+    <!-- Voleibol -->
+    <div class="bg-white/90 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/20 flex flex-col justify-between hover:border-amber-500/50 transition-all duration-300">
+      <div>
+        <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-600 mb-4 font-bold text-xl">
+          🏐
+        </div>
+        <h2 class="text-xl font-bold text-gray-800">Voleibol</h2>
+        <p class="text-sm text-gray-600 mt-2">Campeonato recreativo y competitivo de Voleibol piso en la zona deportiva.</p>
+        
+        <div class="mt-4 space-y-2 text-xs text-gray-500">
+          <div class="flex justify-between py-1 border-b border-gray-100">
+            <span>Estado:</span>
+            <span class="font-semibold text-amber-600">Próximamente</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-gray-100">
+            <span>Inicio:</span>
+            <span class="font-semibold text-gray-700">Próxima semana</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="mt-6 w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-xl text-sm transition-colors shadow-md shadow-amber-500/20">
+        Ver Calendario
+      </button>
+    </div>
+
+  </div>
+</div>
